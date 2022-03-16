@@ -3,6 +3,10 @@
 Instalar python3 si no esta, version 3.8.10
 `sudo apt install python3`
 
+Instalar python3-venv si es necesario
+
+`sudo apt install python3.8-venv`
+
 Instalar docker
 
 `sudo apt-get update`
@@ -58,6 +62,7 @@ Accedemos al ambiente virtual:
 Ejecutamos en el directorio donde esta `setup.py`:
 
 3. `env/bin/python3 setup.py install --user`
+3.1. `env/bin/python3 setup.py install`
 
 Ejectuamos la instalacion: 
 4. `/path/to/python/interpreter setup.py install --user`
@@ -67,6 +72,12 @@ En mi caso seria: `env/bin/python3 setup.py install --user`
 5. Ejecutamos `pip install -e .` en el directorio donde esta el setup.
 
 Esto ahora nos permite importar scripts hermanos en python con importes absolutos.
+
+thesis_v4/env/bin/python3
+
+6. Instalar los requerimientos
+
+`pip install -r requirements.txt`
 
 `pip install Unidecode` para los acentos
 
