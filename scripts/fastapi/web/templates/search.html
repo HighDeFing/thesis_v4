@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Search Template</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', path='assets/css/main.css') }}" />
+		
+		<!-- Include Twitter Bootstrap and jQuery: -->
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-4.5.2.min.css') }}" type="text/css"/>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/jquery-2.2.4.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap.bundle-4.5.2.min.js') }}"></script>
+        
+        <!-- Include the plugin's CSS and JS: -->
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap-multiselect.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-multiselect.css') }}" type="text/css"/>
+
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="search.html" class="logo"><strong>Saber UCV Template</strong> by Heider Delgado</a>
+								</header>
+                                <!-- Search -->
+                                <section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Generic</h1>
+									</header>
+
+                                    <!-- Advanced search-->
+                                    <div class="row gtr-0">
+                                        <div class="col-8 col-12-medium">
+                                            <form method="POST" action="/submitform">
+                                                <h3>Termino de búsqueda</h3>
+                                                <div class="row gtr-uniform">
+                                                    <div class="col-5 col-12-xsmall">
+                                                        <input type="text" name="search_query" id="search_query" value="" placeholder="Name" />
+                                                    </div>
+                                                    <div class="col-3 col-12-xsmall">
+                                                        <select name="category" id="category">
+                                                            <option value="">- Category -</option>
+                                                            <option value="Manufacturing">Manufacturing</option>
+                                                            <option value="Shipping">Shipping</option>
+                                                            <option value="Administration">Administration</option>
+                                                            <option value="Human Resources">Human Resources</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4 col-12-xsmall">
+                                                        <ul class="actions">
+                                                            <li><input type="submit" value="Buscar" class="primary" /></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <h3>Carreras</h3>
+												
+												<div class="row gtr-uniform">
+							
+														{% for facultad in escuelas %}
+														<div class="col-5 col-12-medium">
+														<h4> {{ facultad['facultad'] }} </h4>
+														
+														<select id="{{loop.index}}" name="facultad_name" multiple="multiple">
+														
+															{% for sch in facultad['escuela'] %}
+																<option value="{{sch}}">{{ sch }}</option>
+										
+																{% endfor %}
+															</select>
+														</div>
+														{% endfor %}
+												
+													</div>
+												</div>
+												<!-- <p>Items: {{ escuelas }}</p> -->
+												<div class="col-5 col-12-medium">
+												<input type="submit" value="Send Message" class="primary">
+												</div>
+                                            </form>
+                                        </div>
+                                    </div>
+									<!-- <span class="image main"><img src="{{ url_for('static', path='images/pic11.jpg')}}" alt="" /></span> -->
+								</section>
+
+						</div>
+					</div>
+
+
+			</div>
+
+			 <!--Dropdown with check-->
+
+		
+			<!-- Initialize the plugin: -->
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#1').multiselect(
+						{
+							includeSelectAllOption: true,
+							"1": function(option) {
+							return 'facultad_name';
+						}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#2').multiselect(
+						{
+							includeSelectAllOption: true,
+							"2": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#3').multiselect(
+						{
+							includeSelectAllOption: true,
+							"3": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#4').multiselect(
+						{
+							includeSelectAllOption: true,
+							"4": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#5').multiselect(
+						{
+							includeSelectAllOption: true,
+							"5": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#6').multiselect(
+						{
+							includeSelectAllOption: true,
+							"6": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#7').multiselect(
+						{
+							includeSelectAllOption: true,
+							"7": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#8').multiselect(
+						{
+							includeSelectAllOption: true,
+							"8": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#9').multiselect(
+						{
+							includeSelectAllOption: true,
+							"9": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#10').multiselect(
+						{
+							includeSelectAllOption: true,
+							"10": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#11').multiselect(
+						{
+							includeSelectAllOption: true,
+							"11": function(option) {
+							return 'facultad_name';
+							}
+						}
+					);
+					
+				});
+			</script>
+		
+		<!-- Scripts -->
+			<!-- <script src="{{ url_for('static', path='assets/js/jquery.min.js')}}"></script> -->
+			<script src="{{ url_for('static', path='assets/js/browser.min.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/breakpoints.min.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/util.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/main.js')}}"></script>
+        
+            
+
+	</body>
+</html>

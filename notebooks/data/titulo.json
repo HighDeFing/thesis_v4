@@ -1,0 +1,102 @@
+[
+    {
+    "facultad": "Facultad de Ingeniería",
+    "escuela": [
+        "Escuela de Ingeniería Civil",
+        "Escuela de Ingeniería Eléctrica",
+        "Escuela de Geología, Minas y Geofísica",
+        "Ingeniero Químico",
+        "Ingeniero de Petroleo",
+        "Ingeniero Mecanico",
+        "Escuela de Ingeniería Metalúrgica y Ciencias de los Materiales"
+    ]
+    },
+    {
+        "facultad": "Facultad de Agronomía",
+        "escuela": [
+            "Escuela de Agronomía"
+        ]
+    },
+    {
+        "facultad": "Facultad de Arquitectura y Urbanismo",
+        "escuela": [
+            "Escuela de Arquitectura"
+        ]
+    },
+    {
+        "facultad": "Facultad de Ciencias",
+        "escuela": [
+            "Escuela de Biología",
+            "Escuela de Computación",
+            "Escuela de Física",
+            "Escuela de Geoquímica",
+            "Escuela de Matemática",
+            "Escuela de Química"
+        ]
+    },
+    {
+        "facultad": "Facultad de Ciencias Económicas y Sociales",
+        "escuela":[
+            "Escuela de Administración y Contaduría",
+            "Escuela de Antropología",
+            "Escuela de Estadística y Ciencias Actuariales",
+            "Escuela de Economía",
+            "Escuela de Estudios Internacionales",
+            "Escuela de Sociología",
+            "Escuela de Trabajo Social"
+        ] 
+    },
+    {
+        "facultad": "Facultad de Ciencias Jirídicas y Políticas",
+        "escuela": [
+            "Escuela de Derecho",
+            "Escuela de Estudios Políticos y Administrativo"
+        ]
+    },
+    {
+        "facultad": "Facultad de Ciencias Veterinarias",
+        "escuela": [
+            "Escuela de Ciencias Veterinarias"
+        ]
+
+    },
+    {
+        "facultad": "Facultad de Farmacia",
+        "escuela": [
+            "Escuela de Farmacia"
+        ]
+    },
+    {
+        "facultad": "Facultad de Humanidades y Educación",
+        "escuela":[
+            "Escuela de Artes",
+            "Escuela de Bibliotecología y Archivología",
+            "Escuela de Comunicación Social",
+            "Escuela de Educación",
+            "Escuela de Filosofía",
+            "Escuela de Geografía",
+            "Escuela de Historia",
+            "Escuela de Idiomas Modernos",
+            "Escuela de Letras",
+            "Escuela de Psicología"
+        ]
+    },
+    {
+        "facultad": "Facultad de Medicina",
+        "escuela": [
+            "Escuela de Bioanálisis",
+            "Escuela de Enfermería",
+            "Escuela José M. Vargas",
+            "Escuela Luis Razetti",
+            "Escuela de Nutrición y Dietética",
+            "Escuela de Salud Pública"
+        ]
+    },
+    {
+        "facultad": "Facultad de Odontología",
+        "escuela": [
+            "Escuela de Odontología"
+        ]
+    }
+]
+

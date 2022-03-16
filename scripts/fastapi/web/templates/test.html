@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Search Template</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+        <!-- Include Twitter Bootstrap and jQuery: -->
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-4.5.2.min.css') }}" type="text/css"/>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/jquery-2.2.4.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap.bundle-4.5.2.min.js') }}"></script>
+        
+        <!-- Include the plugin's CSS and JS: -->
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap-multiselect.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-multiselect.css') }}" type="text/css"/>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+                <!-- Build your select: -->
+            <select id="example-getting-started" multiple="multiple">
+                <option value="cheese">Cheese</option>
+                <option value="tomatoes">Tomatoes</option>
+                <option value="mozarella">Mozzarella</option>
+                <option value="mushrooms">Mushrooms</option>
+                <option value="pepperoni">Pepperoni</option>
+                <option value="onions">Onions</option>
+            </select>
+
+            <form method="POST" action="/submitform">
+                <input type="text" id="username" name="username">
+                <input type="text" id="password" name="password">
+                <input type="submit" value="Submit">
+            </form>
+
+        <!-- Initialize the plugin: -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#example-getting-started').multiselect();
+            });
+        </script>
+
+			
+	</body>
+</html>
