@@ -81,6 +81,47 @@ thesis_v4/env/bin/python3
 
 `pip install Unidecode` para los acentos
 
+## Next steps
+
+1. Ir a el archivo de scripts y empezar por scraper_files
+En este archivo se ejecuta scraperv3.py con el paramentro de cuantas tesis se desea descargar el limit es 8210
+
+2. Este paso genera un archivo en csv_files llamado url_thesis_{#numero_tesis}.csv donde #numero de tesis es la cantidad especificada en el paso anterior. Ejemplo: url_thesis_250.csv
+
+3. Luego de realizar el scraping es necesario descargar la tesis, para hacerlo vamos a la carpeta de download_files y ejecutamos el script thesis_downloader colocando en la `download_from_file` aqui colocamos el path dond esta el archivo anterior. Ejemplo ./csv_files/url_thesis_250.csv
+
+4. Luego de descargar los archivos procedemos a verificar si son texto o imagenes que necesitar OCR, para esto utilizamos el criterio de clasificacion descrito en la parte de cristerio de clasificacion.
+Ejecutamos con el archivo de fuente y el archivo de destino con un csv, este programa crea una columna donde se determina si es texto o es imagenes. Se encuentra en preprocessing_files `index_scan.py`
+
+5. Clasificar la escuela: Este paso es realizado por un notebook, en la carpeta notebooks, el archivo school_matcher.ipynb.
+
+5.1. Instalar jupyter notebook 
+`pip install notebook==6.4.10`
+
+5.2. Instalar ipykernel
+`pip install --user ipykernel`
+
+5.3. Añadir el virtual env a jupyter.
+`python -m ipykernel install --user --name=env`
+
+5.4. Ejecutar jupyter notebook:
+`jupyter notebook`
+
+6. Spacy
+
+Para usar spacy ejecutar
+
+6.1. `pip install -U pip setuptools wheel`
+
+6.2. `pip install -U spacy`
+
+6.3. Modelo en español `python -m spacy download es_core_news_sm`
+
+
+
+
+
+
 
 ## Criterio de clasificación
 

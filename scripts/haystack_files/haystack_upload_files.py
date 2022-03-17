@@ -34,9 +34,10 @@ class Haystack_module():
         converter = PDFToTextConverter(remove_numeric_tables=True, valid_languages=["es"])
         docs = converter.convert(file_path=file_source, meta=meta_data)
 
-        self.init_preProcessor()
-        processor = self.get_preProcessor()
-        pre_docs = processor.process(docs)
+        pre_docs = docs
+        #self.init_preProcessor()
+        #processor = self.get_preProcessor()
+        #pre_docs = processor.process(docs)
 
         self.document_store.write_documents(pre_docs)
         self.document_store.update_embeddings(self.retriever)
@@ -71,7 +72,7 @@ class Haystack_module():
 if __name__ == "__main__":
     elastic = Haystack_module()
 
-    csv_source = "scripts/haystack_files/data/thesis_200_with_school_complex.csv"
+    csv_source = "scripts/haystack_files/data/thesis_200_with_resumen_school_complex.csv"
     df = pd.read_csv(csv_source)
     df_head = df.copy()
     df_head = df_head.head(2)

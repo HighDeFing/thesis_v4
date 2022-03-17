@@ -101,7 +101,7 @@ def isScan(csv_source, csv_dest):
     #print(values_c)
 
 if __name__ == '__main__':
-    isScan('./csv_files/url_thesis_250.csv', './csv_files/url_thesis_200_with_scan.csv')
+    isScan('./csv_files/url_thesis_200_resumen.csv', './csv_files/url_thesis_200_resumen_with_scan.csv')
 
 
 

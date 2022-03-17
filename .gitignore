@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# machine learning runs
+mlruns/
+
+#pdfs
+
 # Distribution / packaging
 .Python
 build/
