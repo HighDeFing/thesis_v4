@@ -3,12 +3,16 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from typing import List
+from scripts.haystack_files.haystack_upload_files import Haystack_module
 
 import json
 
 f = open('web/static/data/escuelas.json')
 data = json.load(f)
 
+haystack = Haystack_module()
+haystack.init_QAPipeline()
+elastic_pipe = haystack.get_QAPipeline()
 
 app = FastAPI()
 
@@ -40,3 +44,7 @@ async def read_item(request: Request):
 @app.post("/submitform")
 async def handle_form(search_query: str = Form(None), category: str = Form(None), facultad_name: List[str] = Form(None) ):
     print(search_query, category, facultad_name)
+    query = '¿Qué es un adolescente?'
+    result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "Reader": {"top_k": 3}})
+    print(result)
+    return result

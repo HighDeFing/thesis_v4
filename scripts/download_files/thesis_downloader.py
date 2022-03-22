@@ -20,7 +20,7 @@ def download_from_file(csv_source):
     size = len(df_head.index)
     print(df_head)
 
-    df_head['path'] = 'thesis_pdf'
+    df_head['path'] = 'thesis_pdf_250'
     donwload_func = np.vectorize(download_thesis)
     donwload_func(df_head['path'], df_head['index'], df_head['pdf_link'], size)
 

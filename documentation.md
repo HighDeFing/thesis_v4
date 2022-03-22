@@ -117,6 +117,9 @@ Para usar spacy ejecutar
 
 6.3. Modelo en español `python -m spacy download es_core_news_sm`
 
+Todo esto es parte del paso anterior, para ejecutar el notebook.
+
+
 
 
 
