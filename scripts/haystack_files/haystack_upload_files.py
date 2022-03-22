@@ -23,7 +23,7 @@ class Haystack_module():
         self.initDense__retriver()
 
         #self.retriever = self.get_BM25()
-        self.retriever = self.get_DPR(self)
+        self.retriever = self.get_DPR()
         self.reader = FARMReader("mrm8488/bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=False)
         self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
 
