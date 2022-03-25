@@ -7,7 +7,7 @@ from haystack.nodes import PreProcessor
 from haystack import Document
 import json
 import pdfplumber
-import spacy
+#import spacy
 import pandas as pd
 import numpy as np
 import os
@@ -20,18 +20,29 @@ class Haystack_module():
         self.document_store = ElasticsearchDocumentStore(similarity="dot_product")
 
         # self.initBM25_retriver()
-        self.initDense__retriver()
+        #self.initDense__retriver()
+        self.initES_retriever()
 
         #self.retriever = self.get_BM25()
-        self.retriever = self.get_DPR()
-        self.reader = FARMReader("mrm8488/bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=False)
+        #self.retriever = self.get_DPR()
+        self.retriever = self.get_ES_retriever()
+        self.reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=False)
         self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
+
+    def initES_retriever(self):
+        self.esretriever = ElasticsearchRetriever(self.document_store)
+
+    def get_ES_retriever(self):
+        return self.esretriever
+
+    def get_document_store(self):
+        return self.document_store
 
     def initDense__retriver(self):
         self.dp_retriver = DensePassageRetriever(
         document_store=self.document_store,
         query_embedding_model="voidful/dpr-question_encoder-bert-base-multilingual",
-        passage_embedding_model="sadakmed/dpr-passage_encoder-spanish",
+        passage_embedding_model="voidful/dpr-ctx_encoder-bert-base-multilingual",
         use_gpu=False
         )
 
