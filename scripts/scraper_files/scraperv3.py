@@ -45,20 +45,34 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
         progressbar_counter +=1
         try:
             date = tds.find('td', headers='t1').strong.text
+        except Exception as e:
+            date = None
+        try:  
             title = tds.find('td', headers='t2').text
+        except Exception as e:
+            title = None
+        try:
+            aref_old = tds.find('td', headers='t2').a['href']
+            aref = 'http://saber.ucv.ve{}'.format(aref_old)
+        except Exception as e:
+            aref = None
+        try:
             aref_old = tds.find('td', headers='t2').a['href']
             aref = 'http://saber.ucv.ve{}'.format(aref_old)
             pdf_url = get_pdf_link(aref)
+        except Exception as e:
+            pdf_url = None
+        try:
             author = tds.find('td', headers='t3').text
+        except Exception as e:
+            author = None
+        try:
             size = getSize(aref)
+        except Exception as e:
+            size = None
+        try:
             resumen = get_resumen(aref)
         except Exception as e:
-            date = None
-            title = None
-            aref = None
-            author = None
-            size = None
-            pdf_url = None
             resumen = None
         #print(date, title, author, size, aref)
         csv_writer.writerow([progressbar_counter, date, title, author, size, aref, pdf_url, resumen])
@@ -67,5 +81,5 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
     csv_file.close()
 
 if __name__ == '__main__':
-    find_n_rows(250)
+    find_n_rows(8210)
 

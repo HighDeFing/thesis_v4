@@ -20,12 +20,14 @@ class Haystack_module():
         self.document_store = ElasticsearchDocumentStore(similarity="dot_product")
 
         # self.initBM25_retriver()
-        #self.initDense__retriver()
-        self.initES_retriever()
+        self.initDense__retriver()
+        # self.initES_retriever()
+        self.init_preProcessor()
+        self.preProcessor = self.get_preProcessor()
 
-        #self.retriever = self.get_BM25()
-        #self.retriever = self.get_DPR()
-        self.retriever = self.get_ES_retriever()
+        # self.retriever = self.get_BM25()
+        self.retriever = self.get_DPR()
+        # self.retriever = self.get_ES_retriever()
         self.reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=False)
         self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
 
@@ -65,8 +67,12 @@ class Haystack_module():
         # text = """d A cu m u lad a (% )\n\n\n\n\n\n\n\n\n\n\nV alor m xim o de tensin fase-tierra (en p.u)\n\nValor m xim o de tensin fas e-tierra (e n p.u)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nP ro b ab ilid ad A cu m u lad a ( % )\n\n\x0cProbabilida d Acum ulada\n(Ba rra 115kV fa se "C" - S/E Te m bla dor)\n\nProbabilidad Acumulada\n(Barra 34,5kV fase "C" - S/E Tucupita)\n\n\n\nPro b ab ilid ad Acu m u lad a (% )\n\nProbabilidad Acumulada (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProba bilidad Acumulada\n(Barra 13,8kV fase "C" - S/E Barra ncas)\n\nProba bilidad Acumulada\n(Ba rra 13,8kV fa se "B" - S/E Tucupita)\n\n\nProbabilidad Acumulada (%)\n\nProbabilidad Acumulada (%)\n\n\nV alor m xim o de te ns in fase -tier ra (en p.u)\n\nValor m xim o de te ns in fas e -tie rra (e n p.u)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nV alor m xim o de te ns in fas e -tie rra (e n p.u)\n\n\n\nValor m xim o de te ns in fas e -tie rra (e n p.u)\n\nA.26.3 Distribucin estadstica de probabilidad de ocurrencia de sobretensiones para\nenergizacin de lneas de transmisin (CASO 1)\n\nHistogram a S/E Ba rranca s Barra 115kV\n\n\n\nProbabilidad Ocurrencia (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProbabilidad Ocurrencia (%)\n\nHistogra ma S/E Palital Ba rra 115kV\n\nInte rvalo de s obre te ns in fas e -tie rr a "Fas e A" (p.u)\n\nInte r valo de s obr e te ns in fas e -tie rr a "Fas e B" (p.u)\n\n\x0cHistograma S/E Temblador Barra 115kV\n\n\n\nP ro b a b ilida d O c ur re n c ia (% )\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProbabilidad Ocurrencia (% )\n\nHistograma S/E Tucupita Barra 115kV\n\n\nIntervalo de s obretensin fas e-tie rra "Fas e C" (p.u)\n\nHistogra ma S/E Tucupita Ba rra 34,5kV\n\nProbabilidad Ocurrencia (%)\n\n\nProbabilidad Ocurrencia (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInte r valo de s obr e te ns in fas e -tie r ra "Fas e C" (p.u)\n\nHistogra ma S/E Ba rra nca s Ba rra 13,8kV\n\n\n\nInte rvalo de s obre te ns in fas e -tie r ra "Fas e B" (p.u)\n\n\nProbabilidad Ocurrencia (%)\n\n\nHistogra ma S/E Tucupita Ba rra 13,8kV\n\n\n\nInte rvalo de s obre"""
         # print(text.replace('\n',""))
 
-        new_docs = self.clean_break_line(docs)
+        new_docs = self.preProcessor.process(docs)
+        #print(new_docs[1]["meta"])
+        new_docs = self.clean_break_line(new_docs)
         pre_docs = new_docs
+
+        #print(new_docs)
 
         #file_text = pre_docs.strip()
         #print(file_text)
@@ -96,19 +102,19 @@ class Haystack_module():
             #print(pre_docs["content"].replace('\n',""))
             aux_meta = pre_docs["meta"]
             aux_content = pre_docs["content"].replace('\n',"")
-            new_docs.append(Document(aux_content, aux_meta))
+            new_docs.append(Document(content=aux_content, meta=aux_meta))
+        #print(new_docs)
         return new_docs
-
 
     def init_preProcessor(self):
         self.processor = PreProcessor(
             clean_empty_lines=True,
             clean_whitespace=True,
-            clean_header_footer=True,
             split_by="passage",
             split_length=200,
             split_respect_sentence_boundary=False,
-            split_overlap=0
+            split_overlap=0,
+            language="es"
         )
 
     def get_preProcessor(self):
@@ -130,9 +136,9 @@ if __name__ == "__main__":
     csv_source = "scripts/haystack_files/data/thesis_200_with_resumen_school_complex.csv"
     elastic.write_files_from_csv(csv_source)
 
-    #df = pd.read_csv(csv_source)
-    #df_head = df.copy()
-    #df_head = df_head.head(2)
+    # df = pd.read_csv(csv_source)
+    # df_head = df.copy()
+    # df_head = df_head.head(2)
 
     #print(df_head['path'].values[1])
 

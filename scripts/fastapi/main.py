@@ -1,18 +1,19 @@
-from fastapi import FastAPI, Request, File, Form, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, File, Form, UploadFile, Depends
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from typing import List
 from scripts.haystack_files.haystack_upload_files import Haystack_module
+from schemas import SearchForm
 
 import json
 
 f = open('web/static/data/escuelas.json')
 data = json.load(f)
 
-haystack = Haystack_module()
-haystack.init_QAPipeline()
-elastic_pipe = haystack.get_QAPipeline()
+#haystack = Haystack_module()
+#haystack.init_QAPipeline()
+#elastic_pipe = haystack.get_QAPipeline()
 
 app = FastAPI()
 
@@ -33,9 +34,18 @@ async def read_item(request: Request):
 async def read_item(request: Request):
     return templates.TemplateResponse("generic.html", {"request": request})
 
+@app.post("/results.html", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("results.html", {"request": request})
+
 @app.get("/search.html", response_class=HTMLResponse)
 async def read_item(request: Request):
-    return templates.TemplateResponse("search.html", {"request": request, "escuelas": data}) 
+    return templates.TemplateResponse("search.html", {"request": request, "escuelas": data})
+
+@app.post("/search.html", response_class=HTMLResponse)
+async def handle_form(request: Request, form_data:  SearchForm = Depends(SearchForm.as_form)):
+    print(form_data)
+    return RedirectResponse("/results.html")
 
 @app.get("/test.html", response_class=HTMLResponse)
 async def read_item(request: Request):
@@ -44,7 +54,7 @@ async def read_item(request: Request):
 @app.post("/submitform")
 async def handle_form(search_query: str = Form(None), category: str = Form(None), facultad_name: List[str] = Form(None) ):
     print(search_query, category, facultad_name)
-    query = '¿Qué es un adolescente?'
-    result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "Reader": {"top_k": 3}})
-    print(result)
-    return result
+    #query = '¿Qué es un adolescente?'
+    #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "Reader": {"top_k": 3}})
+    #print(result)
+    #return result

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Search Template</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', path='assets/css/main.css') }}" />
+		
+		<!-- Include Twitter Bootstrap and jQuery: -->
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-4.5.2.min.css') }}" type="text/css"/>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/jquery-2.2.4.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap.bundle-4.5.2.min.js') }}"></script>
+        
+        <!-- Include the plugin's CSS and JS: -->
+        <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap-multiselect.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-multiselect.css') }}" type="text/css"/>
+
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="search.html" class="logo"><strong>Saber UCV Template</strong> by Heider Delgado</a>
+								</header>
+                                <!-- Search -->
+                                <section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Generic</h1>
+									</header>
+
+		
+		<!-- Scripts -->
+			<!-- <script src="{{ url_for('static', path='assets/js/jquery.min.js')}}"></script> -->
+			<script src="{{ url_for('static', path='assets/js/browser.min.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/breakpoints.min.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/util.js')}}"></script>
+			<script src="{{ url_for('static', path='assets/js/main.js')}}"></script>
+        
+            
+
+	</body>
+</html>
