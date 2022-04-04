@@ -28,7 +28,7 @@ class Haystack_module():
         # self.retriever = self.get_BM25()
         self.retriever = self.get_DPR()
         # self.retriever = self.get_ES_retriever()
-        self.reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=False)
+        self.reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=True)
         self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
 
     def initES_retriever(self):
@@ -45,7 +45,7 @@ class Haystack_module():
         document_store=self.document_store,
         query_embedding_model="voidful/dpr-question_encoder-bert-base-multilingual",
         passage_embedding_model="voidful/dpr-ctx_encoder-bert-base-multilingual",
-        use_gpu=False
+        use_gpu=True
         )
 
     def get_DPR(self):

@@ -32,13 +32,16 @@
 
 							<!-- Header -->
 								<header id="header">
-									<a href="search.html" class="logo"><strong>Saber UCV Template</strong> by Heider Delgado</a>
+									<a href="../../search.html" class="logo"><strong>Saber UCV Template</strong> by Heider Delgado</a>
 								</header>
                                 <!-- Search -->
                                 <section id="search" class="alt">
-									<form method="post" action="#">
+									<form method="POST" action="handle_form">
 										<input type="text" name="query" id="query" placeholder="Search" />
 									</form>
+									<ul class="actions">
+									<li><a href="../../search.html">Busqueda Avanzada</a></li>
+									</ul>
 								</section>
 
 							<!-- Content -->
@@ -46,6 +49,26 @@
 									<header class="main">
 										<h1>Generic</h1>
 									</header>
+									<hr class="major" />
+
+										{% for res in respuestas %}
+
+										<!-- <p> {{ res }}</p>
+										<p> Meta: {{ res['meta'] }}</p>
+										<h5> {{ res['meta']['path'] }} </h5> -->
+
+											<h4> {{ res['title'] }} </h4>
+
+											<h5> <b>Escuela:</b> {{ res['meta']['school'] }}</h5>
+
+											<h6> <b>Autor(es):</b> {{ res['meta']['author'] }}</h5>
+											<h6> <b>Año:</b> {{ res['meta']['year'] }} </h5>
+											<p> <b>Texto:</b> {{ res['context'] | safe }} </p>
+
+
+										<hr class="major" />
+										{% endfor %}
+								</section>
 
 		
 		<!-- Scripts -->

@@ -3,9 +3,17 @@ import requests
 import csv
 from scripts.progress_bar.progress_bar import printProgressBar
 from pdf_info_extracter import getSize, get_pdf_link, get_resumen 
+import logging
+from requests.adapters import HTTPAdapter, Retry
+
+logging.basicConfig(level=logging.DEBUG)
+
+s = requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+s.mount('http://', HTTPAdapter(max_retries=retries))
 
 def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_link = "http://saber.ucv.ve/handle/10872/2/browse?type=dateissued&sort_by=2&order=ASC&rpp={}&etal=0&submit_browse=Actualizar"):
-    """Scraps the amount of thesis in the argument n_rows, it cannot be more than 8210, or the number of thesis that UCV has for Pregrado in that time.
+    """Scraps the amount of thesis in the argument n_rows, it cannot be more than 8210, or the number of thesis that UCV has for Pregrado at that time.
 
     Parameters:
     ------------
@@ -24,7 +32,7 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
     This function doesn't return anything, but it write a csv file with the info from thesis.
     """
     url_link = url_link.format(n_rows)
-    n_source = requests.get(url_link).text
+    n_source = s.get(url_link).text
 
     soup = BeautifulSoup(n_source, 'lxml')
 
@@ -46,34 +54,34 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
         try:
             date = tds.find('td', headers='t1').strong.text
         except Exception as e:
-            date = None
+            date = ""
         try:  
             title = tds.find('td', headers='t2').text
         except Exception as e:
-            title = None
+            title = ""
         try:
             aref_old = tds.find('td', headers='t2').a['href']
             aref = 'http://saber.ucv.ve{}'.format(aref_old)
         except Exception as e:
-            aref = None
+            aref = ""
         try:
             aref_old = tds.find('td', headers='t2').a['href']
             aref = 'http://saber.ucv.ve{}'.format(aref_old)
             pdf_url = get_pdf_link(aref)
         except Exception as e:
-            pdf_url = None
+            pdf_url = ""
         try:
             author = tds.find('td', headers='t3').text
         except Exception as e:
-            author = None
+            author = ""
         try:
             size = getSize(aref)
         except Exception as e:
-            size = None
+            size = ""
         try:
-            resumen = get_resumen(aref)
+            resumen = ""
         except Exception as e:
-            resumen = None
+            resumen = ""
         #print(date, title, author, size, aref)
         csv_writer.writerow([progressbar_counter, date, title, author, size, aref, pdf_url, resumen])
         #print(pdf_url + '\n')
@@ -81,5 +89,5 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
     csv_file.close()
 
 if __name__ == '__main__':
-    find_n_rows(8210)
+    find_n_rows(8211)
 

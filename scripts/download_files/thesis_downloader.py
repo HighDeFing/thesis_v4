@@ -1,10 +1,20 @@
 import requests
+from requests.adapters import HTTPAdapter, Retry
+import logging
 import pandas as pd
 import numpy as np
 from scripts.progress_bar.progress_bar import printProgressBar
 
+from requests.adapters import HTTPAdapter, Retry
+
+logging.basicConfig(level=logging.DEBUG)
+
+s = requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+s.mount('http://', HTTPAdapter(max_retries=retries))
+
 def download_thesis(path_to_save, thesis_title, url, size):
-    pdf_response = requests.get(url)
+    pdf_response = s.get(url)
     #filename = unquote(pdf_response.url).split('/')[-1].replace(' ', '_')
     filename = str(thesis_title)
     l = int(size)
@@ -14,17 +24,17 @@ def download_thesis(path_to_save, thesis_title, url, size):
         # write PDF to local file
         f.write(pdf_response.content)
 
-def download_from_file(csv_source):
+def download_from_file(csv_source, path_to_save):
     df = pd.read_csv(csv_source)
     df_head = df.copy()
     size = len(df_head.index)
     print(df_head)
 
-    df_head['path'] = 'thesis_pdf_250'
+    df_head['path'] = path_to_save
     donwload_func = np.vectorize(download_thesis)
     donwload_func(df_head['path'], df_head['index'], df_head['pdf_link'], size)
 
 
 if __name__ == '__main__':
-    download_from_file('./csv_files/url_thesis_250.csv')
+    download_from_file('./csv_files/url_thesis_8211.csv', 'thesis_pdf_all')
 

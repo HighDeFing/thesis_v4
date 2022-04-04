@@ -2,6 +2,14 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 from urllib.request import unquote
+import logging
+from requests.adapters import HTTPAdapter, Retry
+
+logging.basicConfig(level=logging.DEBUG)
+
+s = requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+s.mount('http://', HTTPAdapter(max_retries=retries))
 
 # link http://saber.ucv.ve/handle/10872/17712
 
@@ -22,7 +30,7 @@ def get_pdf_link(uri_path):
         A string with the pdf downloadable link.
         Example url: http://saber.ucv.ve/bitstream/10872/314/1/tesis_DD162dacevedo.PDF
     """
-    source = requests.get(uri_path).text
+    source = s.get(uri_path).text
     soup = BeautifulSoup(source, 'lxml')
     content = soup.find('td', class_='pageContents')
     table = content.find_all('table', class_='miscTable')[1]
@@ -52,7 +60,7 @@ def get_resumen(uri_path):
         dirigido hacia la simulación, determinación y análisis de las perturbaciones posibles en las 
         líneas de transmisión en 115kV comprendidas en la ampliación del sistema de [...]
     """
-    source = requests.get(uri_path).text
+    source = s.get(uri_path).text
     soup = BeautifulSoup(source, 'lxml')
     content = soup.find('td', class_='pageContents')
     label_resumen = soup.find_all('td', class_='metadataFieldLabel')
@@ -71,7 +79,7 @@ def get_resumen(uri_path):
     
 
 def download_pdf(pdf_link):
-    pdf_response = requests.get(pdf_link)
+    pdf_response = s.get(pdf_link)
     filename = unquote(pdf_response.url).split('/')[-1].replace(' ', '_')
     #print(filename)
     with open('./pdf/' + filename, 'wb') as f:
