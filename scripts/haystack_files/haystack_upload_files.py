@@ -16,49 +16,66 @@ from scripts.progress_bar.progress_bar import printProgressBar
 
 
 class Haystack_module():
-    def __init__(self):
+    def __init__(self, option = "ES", pipe_line_op = "document"):
         self.document_store = ElasticsearchDocumentStore(similarity="dot_product")
 
-        # self.initBM25_retriver()
-        self.initDense__retriver()
-        # self.initES_retriever()
+        #select an option for retriever
+        if option == "Dense":
+            self.init_Dense_retriever(self.document_store)
+            retriever = self.get_DPR()
+        if option == "ES":
+            self.init_ES_retriever(self.document_store)
+            retriever = self.get_ES_retriever()
+        
+        # get the reader
+        self.init_FARMReader()
+        reader =  self.get_FARMReader()
+        
+        #set preprocess files
         self.init_preProcessor()
-        self.preProcessor = self.get_preProcessor()
 
-        # self.retriever = self.get_BM25()
-        self.retriever = self.get_DPR()
-        # self.retriever = self.get_ES_retriever()
-        self.reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=True)
+        #Establish pipeline
+        if pipe_line_op == "document":
+            self.init_DocumentSearchPipeline(retriever)
+        if pipe_line_op == "qa":
+            self.init_QAPipeline(retriever = retriever, reader = reader)
+
         self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
 
-    def initES_retriever(self):
-        self.esretriever = ElasticsearchRetriever(self.document_store)
-
-    def get_ES_retriever(self):
-        return self.esretriever
-
+    # Document Store
     def get_document_store(self):
         return self.document_store
 
-    def initDense__retriver(self):
-        self.dp_retriver = DensePassageRetriever(
-        document_store=self.document_store,
+    #Retrivers
+    #Elastic Search retriever
+    def init_ES_retriever(self, document_store):
+        self.es_retriever = ElasticsearchRetriever(document_store=document_store)
+
+    def get_ES_retriever(self):
+        return self.es_retriever
+
+    #Dense retriever
+    def init_Dense_retriever(self, document_store):
+        self.dp_retriever = DensePassageRetriever(
+        document_store=document_store,
         query_embedding_model="voidful/dpr-question_encoder-bert-base-multilingual",
         passage_embedding_model="voidful/dpr-ctx_encoder-bert-base-multilingual",
         use_gpu=True
         )
 
-    def get_DPR(self):
-        return self.dp_retriver
+    def get_Dense_retriever(self):
+        return self.dp_retriever
 
-    def initBM25_retriver(self):
-        self.bm25_retriver = ElasticsearchRetriever(self.document_store)
+    #Readers
+    def init_FARMReader(self):
+        self.FARM_reader = FARMReader("mrm8488/distill-bert-base-spanish-wwm-cased-finetuned-spa-squad2-es", use_gpu=True)
 
-    def get_BM25(self):
-        return self.bm25_retriver
+    def get_FARMReader(self):
+        return self.FARM_reader
 
-    def write_file_in_elastic(self, file_source, school, title, author, year, size, path, resumen):
-        meta_data = { "school": str(school), "title": str(title), "author": str(author), "year": str(year), "size": str(size), "path": str(path), "resumen": str(resumen) }
+
+    def write_file_in_elastic(self, document_store, retriever, option, file_source, school, title, author, year, size, path):
+        meta_data = { "school": str(school), "title": str(title), "author": str(author), "year": str(year), "size": str(size), "path": str(path) }
         # print(meta_data)
         converter = PDFToTextConverter(remove_numeric_tables=True, valid_languages=["es"])
         docs = converter.convert(file_path=file_source, meta=meta_data)
@@ -80,20 +97,25 @@ class Haystack_module():
         #processor = self.get_preProcessor()
         #pre_docs = processor.process(docs)
 
-        self.document_store.write_documents(pre_docs)
-        self.document_store.update_embeddings(self.retriever)
+        document_store.write_documents(pre_docs)
+        if option == "dense":
+            document_store.update_embeddings(retriever)
+        
 
-    def init_QAPipeline(self):
-        self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
-
-    def init_DocumentSearchPipeline(self):
-        self.document_search_pipe = DocumentSearchPipeline(retriever=self.retriever)
-
-    def get_DocumentSearchPipeline(self):
-        return self.document_search_pipe
+    #PipeLines
+    #QA Pipeline
+    def init_QAPipeline(self, reader, retriever):
+        self.qa_pipe = ExtractiveQAPipeline(reader=reader, retriever=retriever)
 
     def get_QAPipeline(self):
         return self.qa_pipe
+
+    #Document PipeLine
+    def init_DocumentSearchPipeline(self, retriever):
+        self.document_search_pipe = DocumentSearchPipeline(retriever=retriever)
+
+    def get_DocumentSearchPipeline(self):
+        return self.document_search_pipe
 
     def clean_break_line(self, docs):
         aux_content = []
@@ -111,7 +133,7 @@ class Haystack_module():
             clean_empty_lines=True,
             clean_whitespace=True,
             split_by="passage",
-            split_length=200,
+            split_length=500,
             split_respect_sentence_boundary=False,
             split_overlap=0,
             language="es"
@@ -120,21 +142,39 @@ class Haystack_module():
     def get_preProcessor(self):
         return self.processor
 
-    def write_files_from_csv(self, csv_source):
+    def write_files_from_csv_Dense(self, csv_source):
         df = pd.read_csv(csv_source)
         df_head = df.copy()
 
         write_vec = np.vectorize(self.write_file_in_elastic)
 
-        write_vec(df_head['path'], df_head["school_complex"],
-        df_head["thesis_title"], df_head["thesis_author"], df_head["thesis_year"],
-        df_head["size"], df_head["path"], df_head["resumen"])
+        document_store = self.get_document_store()
+        retriever = self.get_Dense_retriever()
+        option = "dense" 
+        
+        write_vec(document_store = document_store, retriever = retriever, option = option, 
+        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"],
+        author = df_head["thesis_author"], year = df_head["thesis_year"], size = df_head["size"], path = df_head["path"])
+
+    def write_files_from_csv_Sparse(self, csv_source):
+        df = pd.read_csv(csv_source)
+        df_head = df.copy()
+
+        write_vec = np.vectorize(self.write_file_in_elastic)
+
+        document_store = self.get_document_store()
+        retriever = self.get_ES_retriever()
+        option = "sparse" 
+
+        write_vec(document_store = document_store, retriever = retriever, option = option, 
+        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"],
+        author = df_head["thesis_author"], year = df_head["thesis_year"], size = df_head["size"], path = df_head["path"])
 
 
 if __name__ == "__main__":
     elastic = Haystack_module()
     csv_source = "scripts/haystack_files/data/thesis_200_with_resumen_school_complex.csv"
-    elastic.write_files_from_csv(csv_source)
+    elastic.write_files_from_csv_Dense(csv_source)
 
     # df = pd.read_csv(csv_source)
     # df_head = df.copy()

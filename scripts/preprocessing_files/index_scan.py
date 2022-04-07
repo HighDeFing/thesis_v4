@@ -84,12 +84,12 @@ def concatenate(row, other_row):
     return str(row) + str(other_row) + '.pdf'
 
 
-def isScan(csv_source, csv_dest):
+def isScan(csv_source, csv_dest, source_folder):
     df = pd.read_csv(csv_source)
     df_head = df.copy()
     
     l = len(df_head.index)
-    df_head['path'] = 'thesis_pdf/'
+    df_head['path'] = source_folder
     func_concat = np.vectorize(concatenate)
     values = func_concat(df_head['path'], df_head['index'])
     df_head['path'] = values.tolist()
@@ -101,7 +101,7 @@ def isScan(csv_source, csv_dest):
     #print(values_c)
 
 if __name__ == '__main__':
-    isScan('./csv_files/url_thesis_200_resumen.csv', './csv_files/url_thesis_200_resumen_with_scan.csv')
+    isScan('./csv_files/url_thesis_200_resumen.csv', './csv_files/url_thesis_200_resumen_with_scan.csv', 'thesis_pdf_all/')
 
 
 

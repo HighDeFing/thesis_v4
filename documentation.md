@@ -81,7 +81,27 @@ thesis_v4/env/bin/python3
 
 `pip install Unidecode` para los acentos
 
-## Next steps
+## Spacy
+
+```console
+$ pip install -U pip setuptools wheel
+$ pip install -U spacy
+$ pip install -U 'spacy[cuda101]' #gpu important to know cuda version with `nvcc --version`
+$ python -m spacy download es_core_news_sm #efficinecy
+$ python -m spacy download es_dep_news_trf #accuracy
+```
+
+
+## Pdf dealing
+
+### Is it a pdf:
+
+
+```console
+$ pip install pdfminer.six
+```
+
+## Jupyter
 
 1. Ir a el archivo de scripts y empezar por scraper_files
 En este archivo se ejecuta scraperv3.py con el paramentro de cuantas tesis se desea descargar el limit es 8210
