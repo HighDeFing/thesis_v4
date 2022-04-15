@@ -46,28 +46,16 @@
 
 							<!-- Content -->
 								<section>
-									<header class="main">
-										<h1>Generic</h1>
-									</header>
+									{% for res in respuestas %}
 									<hr class="major" />
-
-										{% for res in respuestas %}
-
-										<!-- <p> {{ res }}</p>
-										<p> Meta: {{ res['meta'] }}</p>
-										<h5> {{ res['meta']['path'] }} </h5> -->
-
-											<h4> {{ res['title'] }} </h4>
-
-											<h5> <b>Escuela:</b> {{ res['meta']['school'] }}</h5>
-
-											<h6> <b>Autor(es):</b> {{ res['meta']['author'] }}</h5>
-											<h6> <b>Año:</b> {{ res['meta']['year'] }} </h5>
-											<p> <b>Texto:</b> {{ res['context'] | safe }} </p>
-
-
-										<hr class="major" />
-										{% endfor %}
+									<h3> <b>{{ res['meta']['path'] }}</b> </h3>
+									<h4> <b>Titulo:</b> {{ res['meta']['title'] }} </h4>
+									<h5> <b>Escuela:</b> {{ res['meta']['school'] }}</h5>
+									<h6> <b>Año:</b> {{ res['meta']['year'] }} </h5>
+									<h7> <b>Relevancia:</b> {{ res['score'] }}</h7>
+											<p>{{res['content'][:500]}}</p>
+									{% endfor %}
+										
 								</section>
 
 		
@@ -82,3 +70,20 @@
 
 	</body>
 </html>
+
+<!-- {% for res in respuestas %} -->
+
+										<!-- <p> {{ res }}</p>
+										<p> Meta: {{ res['meta'] }}</p>
+										<h5> {{ res['meta']['path'] }} </h5> -->
+
+											<!-- <h4> {{ res['title'] }} </h4>
+
+											<h5> <b>Escuela:</b> {{ res['meta']['school'] }}</h5>
+
+											<h6> <b>Autor(es):</b> {{ res['meta']['author'] }}</h5>
+											<h6> <b>Año:</b> {{ res['meta']['year'] }} </h5>
+											<p> <b>Texto:</b> {{ res['context'] | safe }} </p> -->
+
+											<!-- <hr class="major" />
+										{% endfor %} -->

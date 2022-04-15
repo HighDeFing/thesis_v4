@@ -57,4 +57,26 @@ class Answer_result():
             new_json.append(x)
         return new_json
 
+class Document_result():
+    def __init__(self, results):
+        self.a = [x.to_dict() for x in results["documents"]]
+        self.a_json = [x.to_json() for x in results["documents"]]
+
+        self.a_json = [json.loads(x) for x in self.a_json]
+
+        self.size_arr = len(self.a)
+        #print(self.a_json)
+        self.a_json = self.round_json()
+    
+    def round_json(self, round_by = 4):
+        new_json = []
+        for x in self.a_json:
+            new_number = round(x['score'], round_by)
+            x['score'] = new_number
+            new_json.append(x)
+        return new_json
+
+    def json_object(self):
+        return self.a_json
+
 

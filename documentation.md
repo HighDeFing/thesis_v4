@@ -140,7 +140,13 @@ Para usar spacy ejecutar
 Todo esto es parte del paso anterior, para ejecutar el notebook.
 
 
+## Tiempos:
 
+- Para verificar los errores de saber si una tesis existe y es pdf lejible con 8211 tesis se tardo 2 horas.
+
+- Para identificar si es imagen o es pdf con texto se tardo 5 horas.
+
+- Para clasificar e identificar la carrera de la tesis se tardo
 
 
 

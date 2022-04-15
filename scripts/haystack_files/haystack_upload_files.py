@@ -22,7 +22,7 @@ class Haystack_module():
         #select an option for retriever
         if option == "Dense":
             self.init_Dense_retriever(self.document_store)
-            retriever = self.get_DPR()
+            retriever = self.get_Dense_retriever()
         if option == "ES":
             self.init_ES_retriever(self.document_store)
             retriever = self.get_ES_retriever()
@@ -40,7 +40,7 @@ class Haystack_module():
         if pipe_line_op == "qa":
             self.init_QAPipeline(retriever = retriever, reader = reader)
 
-        self.qa_pipe = ExtractiveQAPipeline(reader=self.reader, retriever=self.retriever)
+        #self.qa_pipe = ExtractiveQAPipeline(reader=reader, retriever=retriever)
 
     # Document Store
     def get_document_store(self):
@@ -84,7 +84,8 @@ class Haystack_module():
         # text = """d A cu m u lad a (% )\n\n\n\n\n\n\n\n\n\n\nV alor m xim o de tensin fase-tierra (en p.u)\n\nValor m xim o de tensin fas e-tierra (e n p.u)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nP ro b ab ilid ad A cu m u lad a ( % )\n\n\x0cProbabilida d Acum ulada\n(Ba rra 115kV fa se "C" - S/E Te m bla dor)\n\nProbabilidad Acumulada\n(Barra 34,5kV fase "C" - S/E Tucupita)\n\n\n\nPro b ab ilid ad Acu m u lad a (% )\n\nProbabilidad Acumulada (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProba bilidad Acumulada\n(Barra 13,8kV fase "C" - S/E Barra ncas)\n\nProba bilidad Acumulada\n(Ba rra 13,8kV fa se "B" - S/E Tucupita)\n\n\nProbabilidad Acumulada (%)\n\nProbabilidad Acumulada (%)\n\n\nV alor m xim o de te ns in fase -tier ra (en p.u)\n\nValor m xim o de te ns in fas e -tie rra (e n p.u)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nV alor m xim o de te ns in fas e -tie rra (e n p.u)\n\n\n\nValor m xim o de te ns in fas e -tie rra (e n p.u)\n\nA.26.3 Distribucin estadstica de probabilidad de ocurrencia de sobretensiones para\nenergizacin de lneas de transmisin (CASO 1)\n\nHistogram a S/E Ba rranca s Barra 115kV\n\n\n\nProbabilidad Ocurrencia (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProbabilidad Ocurrencia (%)\n\nHistogra ma S/E Palital Ba rra 115kV\n\nInte rvalo de s obre te ns in fas e -tie rr a "Fas e A" (p.u)\n\nInte r valo de s obr e te ns in fas e -tie rr a "Fas e B" (p.u)\n\n\x0cHistograma S/E Temblador Barra 115kV\n\n\n\nP ro b a b ilida d O c ur re n c ia (% )\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nProbabilidad Ocurrencia (% )\n\nHistograma S/E Tucupita Barra 115kV\n\n\nIntervalo de s obretensin fas e-tie rra "Fas e C" (p.u)\n\nHistogra ma S/E Tucupita Ba rra 34,5kV\n\nProbabilidad Ocurrencia (%)\n\n\nProbabilidad Ocurrencia (%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInte r valo de s obr e te ns in fas e -tie r ra "Fas e C" (p.u)\n\nHistogra ma S/E Ba rra nca s Ba rra 13,8kV\n\n\n\nInte rvalo de s obre te ns in fas e -tie r ra "Fas e B" (p.u)\n\n\nProbabilidad Ocurrencia (%)\n\n\nHistogra ma S/E Tucupita Ba rra 13,8kV\n\n\n\nInte rvalo de s obre"""
         # print(text.replace('\n',""))
 
-        new_docs = self.preProcessor.process(docs)
+        preProcessor = self.get_preProcessor()
+        new_docs = preProcessor.process(docs)
         #print(new_docs[1]["meta"])
         new_docs = self.clean_break_line(new_docs)
         pre_docs = new_docs
@@ -132,9 +133,9 @@ class Haystack_module():
         self.processor = PreProcessor(
             clean_empty_lines=True,
             clean_whitespace=True,
-            split_by="passage",
-            split_length=500,
-            split_respect_sentence_boundary=False,
+            split_by="word",
+            split_length=400,
+            split_respect_sentence_boundary=True,
             split_overlap=0,
             language="es"
         )
@@ -149,6 +150,7 @@ class Haystack_module():
         write_vec = np.vectorize(self.write_file_in_elastic)
 
         document_store = self.get_document_store()
+        #self.init_Dense_retriever(document_store)
         retriever = self.get_Dense_retriever()
         option = "dense" 
         
@@ -172,8 +174,8 @@ class Haystack_module():
 
 
 if __name__ == "__main__":
-    elastic = Haystack_module()
-    csv_source = "scripts/haystack_files/data/thesis_200_with_resumen_school_complex.csv"
+    elastic = Haystack_module(option="Dense")
+    csv_source = "scripts/haystack_files/data/thesis_computacion_only.csv"
     elastic.write_files_from_csv_Dense(csv_source)
 
     # df = pd.read_csv(csv_source)

@@ -10,19 +10,19 @@ from typing import List
 from scripts.haystack_files.haystack_upload_files import Haystack_module
 from haystack.utils import print_answers, print_documents
 from schemas import SearchForm, SearchSimpleForm
-from parser import Answer_result
+from parser import Answer_result, Document_result
 
 import json
 
 f = open('web/static/data/escuelas.json')
 data = json.load(f)
 
-haystack = Haystack_module()
-haystack.init_QAPipeline()
-elastic_pipe = haystack.get_QAPipeline()
+haystack = Haystack_module(option="Dense", pipe_line_op = "document")
+#haystack.init_QAPipeline()
+#elastic_pipe = haystack.get_QAPipeline()
 
-haystack.init_DocumentSearchPipeline()
 document_pipe = haystack.get_DocumentSearchPipeline()
+
 
 def parse_schools(school_strings):
     #print(school_strings[1])
@@ -78,10 +78,16 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
     #print(facultad_name[1])
     #result = document_pipe.run(query, params={"Retriever": {"top_k": 100}})
     #print_documents(result, max_text_len=500, print_name=True, print_meta=True)
-    result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10, "filters": {"school": schools}}, "Reader": {"top_k": 3}})
+    #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10, "filters": {"school": schools}}, "Reader": {"top_k": 3}})
+    result = document_pipe.run(query=query, params={"Retriever": {"top_k": 10}})
     #print_answers(result, details="all", max_text_len=200)
-    ansObj = Answer_result(result)
+    #print_documents(result, max_text_len=100, print_name=True, print_meta=True)
+    #ansObj = Answer_result(result)
+    #ansObj = ansObj.json_object()
+    ansObj = Document_result(result)
     ansObj = ansObj.json_object()
+    #ansObj = "something"
+
     #print("data:", type(ansObj))
 
     # for res in ansObj:
@@ -141,10 +147,10 @@ async def handle_form(request: Request, form_data:  SearchForm = Depends(SearchF
 async def read_item(request: Request):
     return templates.TemplateResponse("test.html", {"request": request})
 
-@app.post("/submitform")
-async def handle_form(search_query: str = Form(None), category: str = Form(None), facultad_name: List[str] = Form(None) ):
-    print(search_query, category, facultad_name)
-    #query = '¿Qué es un adolescente?'
-    #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "Reader": {"top_k": 3}})
-    #print(result)
-    #return result
+# @app.post("/submitform")
+# async def handle_form(search_query: str = Form(None), category: str = Form(None), facultad_name: List[str] = Form(None) ):
+#     print(search_query, category, facultad_name)
+#     #query = '¿Qué es un adolescente?'
+#     #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "Reader": {"top_k": 3}})
+#     #print(result)
+#     #return result
