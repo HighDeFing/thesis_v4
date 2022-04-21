@@ -60,7 +60,8 @@ class Haystack_module():
         document_store=document_store,
         query_embedding_model="voidful/dpr-question_encoder-bert-base-multilingual",
         passage_embedding_model="voidful/dpr-ctx_encoder-bert-base-multilingual",
-        use_gpu=True
+        use_gpu=True,
+        batch_size = 64
         )
 
     def get_Dense_retriever(self):

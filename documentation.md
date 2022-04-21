@@ -188,4 +188,36 @@ Por lo tanto se especifica en que paginas se buscara la escuela en las primeras 
 2. Descargar laas tesis en thesis_downloader.py en download_files, recordar colocar el nombre del csv donde estan laos url de las tesis del paso anterior.
 3. Ejecutar luego index_scan en preprocessing_files, recordar cambiar los parametros que son.
 
+## Evaluacion
+
+Los documentos para entrenar son de index:
+
+1. 5567
+2. 5541
+3. 5576
+4. 5603
+5. 5602 
+6. 5601
+7. 5600
+8. 5599
+9. 5598
+10. 5595
+11. 5594
+12. 5593
+13. 5592
+14. 5590
+15. 5577
+16. 5589
+17. 5583
+18. 5538
+19. 5501
+20. 5496
+
+### Para cada tesis se debe poner un minimo de 5 preguntas etiquetadas.
+
+Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y respuestas.
+
+
+
+
 
