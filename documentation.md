@@ -213,6 +213,22 @@ Los documentos para entrenar son de index:
 19. 5501
 20. 5496
 
+Los documentos para evaluar son de index:
+
+1. 5728
+2. 5727
+3. 5726
+4. 5725
+5. 5628
+
+Los documentos para probar son de index:
+
+1. 5633
+2. 5641 
+3. 5631
+4. 5630
+5. 5629
+
 ### Para cada tesis se debe poner un minimo de 5 preguntas etiquetadas.
 
 Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y respuestas.
