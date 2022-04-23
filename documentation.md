@@ -229,6 +229,30 @@ Los documentos para probar son de index:
 4. 5630
 5. 5629
 
+#### Squad to DPR
+
+Se necesita todo haystack de github.
+
+path de squad: `/home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/answers_30.json`
+
+path de dpr: `/home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/answers_30_dpr.json`
+
+commando en haystack/haystack/utils:
+
+Training:
+`python3 haystack/utils/squad_to_dpr.py --squad_input_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/training.json --dpr_output_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/training_dpr.json`
+
+Dev:
+
+`python3 haystack/utils/squad_to_dpr.py --squad_input_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/dev.json --dpr_output_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/dev_dpr.json`
+
+Test:
+
+`python3 haystack/utils/squad_to_dpr.py --squad_input_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/test.json --dpr_output_filename /home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/test_dpr.json`
+
+Como se tiene una version mas vieja de pip recordad install haystack con:
+`pip install -e '.[sql,only-faiss-gpu,only-milvus1,weaviate,graphdb,crawler,preprocessing,ocr,onnx-gpu,ray,dev]'`
+
 ### Para cada tesis se debe poner un minimo de 5 preguntas etiquetadas.
 
 Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y respuestas.
