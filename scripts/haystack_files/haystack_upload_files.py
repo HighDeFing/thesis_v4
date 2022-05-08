@@ -14,22 +14,23 @@ import os
 import unidecode
 from scripts.progress_bar.progress_bar import printProgressBar
 
+model_path = './notebooks/models/model_big'
 
 class Haystack_module():
-    def __init__(self, option = "ES", pipe_line_op = "document"):
+    def __init__(self, option = "ES", pipe_line_op = "document", dense_model_path = ""):
         self.document_store = ElasticsearchDocumentStore(similarity="dot_product")
 
         #select an option for retriever
         if option == "Dense":
-            self.init_Dense_retriever(self.document_store)
+            self.init_Dense_retriever(document_store=self.document_store, save_dir=dense_model_path)
             retriever = self.get_Dense_retriever()
         if option == "ES":
             self.init_ES_retriever(self.document_store)
             retriever = self.get_ES_retriever()
         
         # get the reader
-        self.init_FARMReader()
-        reader =  self.get_FARMReader()
+        #self.init_FARMReader()
+        #reader =  self.get_FARMReader()
         
         #set preprocess files
         self.init_preProcessor()
@@ -38,6 +39,9 @@ class Haystack_module():
         if pipe_line_op == "document":
             self.init_DocumentSearchPipeline(retriever)
         if pipe_line_op == "qa":
+            # get the reader
+            self.init_FARMReader()
+            reader =  self.get_FARMReader()
             self.init_QAPipeline(retriever = retriever, reader = reader)
 
         #self.qa_pipe = ExtractiveQAPipeline(reader=reader, retriever=retriever)
@@ -55,14 +59,22 @@ class Haystack_module():
         return self.es_retriever
 
     #Dense retriever
-    def init_Dense_retriever(self, document_store):
-        self.dp_retriever = DensePassageRetriever(
-        document_store=document_store,
-        query_embedding_model="voidful/dpr-question_encoder-bert-base-multilingual",
-        passage_embedding_model="voidful/dpr-ctx_encoder-bert-base-multilingual",
-        use_gpu=True,
-        batch_size = 64
-        )
+    def init_Dense_retriever(self, document_store, save_dir=""):
+
+        if not save_dir:
+            self.dp_retriever = DensePassageRetriever(
+            document_store=document_store,
+            query_embedding_model="IIC/dpr-spanish-question_encoder-allqa-base",  #IIC/dpr-spanish-question_encoder-allqa-base #voidful/dpr-question_encoder-bert-base-multilingual
+            passage_embedding_model="IIC/dpr-spanish-passage_encoder-allqa-base", #IIC/dpr-spanish-passage_encoder-allqa-base #voidful/dpr-ctx_encoder-bert-base-multilingual
+            use_gpu=True,
+            batch_size = 64
+            )
+        else:
+            #load fine tuned model
+            #print("THIS IS THE MODEL")
+            print(save_dir)
+            self.dp_retriever = DensePassageRetriever.load(load_dir=save_dir, document_store=document_store, use_gpu=True)
+
 
     def get_Dense_retriever(self):
         return self.dp_retriever
@@ -175,8 +187,9 @@ class Haystack_module():
 
 
 if __name__ == "__main__":
+    elastic = Haystack_module(option="Dense", dense_model_path=model_path)
     elastic = Haystack_module(option="Dense")
-    csv_source = "scripts/haystack_files/data/thesis_computacion_only.csv"
+    csv_source = "scripts/haystack_files/data/thesis_30_computacion.csv"
     elastic.write_files_from_csv_Dense(csv_source)
 
     # df = pd.read_csv(csv_source)

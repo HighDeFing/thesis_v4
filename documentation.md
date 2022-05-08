@@ -231,7 +231,7 @@ Los documentos para probar son de index:
 
 #### Squad to DPR
 
-Se necesita todo haystack de github.
+Se necesita todo haystack de github. Para correr esto se debe hacer en el directorio de haystack.
 
 path de squad: `/home/heider/Codes/thesis_v4/notebooks/squad_format_thesis/answers_30.json`
 
@@ -256,6 +256,71 @@ Como se tiene una version mas vieja de pip recordad install haystack con:
 ### Para cada tesis se debe poner un minimo de 5 preguntas etiquetadas.
 
 Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y respuestas.
+
+### Evaluacion:
+
+#### Modelo pre-entrenado:
+
+Retriever Recall: 0.56
+Retriever Mean Avg Precision: 0.32666666666666655
+
+#### Con hiperparametros:
+
+1. Caso 1:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=4,
+    grad_acc_steps=2,
+    save_dir=save_dir,
+    evaluate_every=6,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+)
+```
+
+Retriever Recall: 0.64
+Retriever Mean Avg Precision: 0.4013333333333333
+
+2. Caso 2:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=4,
+    grad_acc_steps=2,
+    save_dir=save_dir,
+    evaluate_every=6,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+)
+```
+
+#### Modelo sin entrenar:
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5256944444444445
+
+#### Modelo estadistico BM25:
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.516
+
+
+## CUDA and GPU
+
+Para que funcionara con mi GPU de 3070ti tuve que utilizar este comando para tener cuda `1.11.0`.
+
+`pip3 install --upgrade torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113`
 
 
 

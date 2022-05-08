@@ -17,10 +17,17 @@ import json
 f = open('web/static/data/escuelas.json')
 data = json.load(f)
 
-haystack = Haystack_module(option="Dense", pipe_line_op = "document")
+model_path = "../../notebooks/models/model_big"
+
+# Dense retriever
+#haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_path)
+
+#Elastic search retriever
+haystack = Haystack_module(option="ES", pipe_line_op = "document")
+
 #haystack.init_QAPipeline()
 #elastic_pipe = haystack.get_QAPipeline()
-
+#etriever = haystack.get_Dense_retriever()
 document_pipe = haystack.get_DocumentSearchPipeline()
 
 
