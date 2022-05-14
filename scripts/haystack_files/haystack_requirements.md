@@ -15,3 +15,4 @@ pip install -e .[all] ## or 'all-gpu' for the GPU-enabled dependencies
 ```
 
 It may need to restart the env.
+

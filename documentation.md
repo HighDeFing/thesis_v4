@@ -298,12 +298,194 @@ retriever.train(
     batch_size=4,
     grad_acc_steps=2,
     save_dir=save_dir,
-    evaluate_every=6,
+    evaluate_every=8, #Aqui
     embed_title=True,
     num_positives=1,
     num_hard_negatives=1,
 )
 ```
+
+Retriever Recall: 0.6
+Retriever Mean Avg Precision: 0.39
+
+
+
+3. Caso 3:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=4,
+    grad_acc_steps=4, #aqui
+    save_dir=save_dir,
+    evaluate_every=4, #aqui
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+)
+```
+
+Retriever Recall: 0.64
+Retriever Mean Avg Precision: 0.33333333333333326
+
+4. Caso 4:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=2,
+    grad_acc_steps=1, #aqui
+    save_dir=save_dir,
+    evaluate_every=6, #aqui
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+)
+```
+
+Retriever Recall: 0.6
+Retriever Mean Avg Precision: 0.32266666666666666
+
+5. Caso 5:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=4,
+    grad_acc_steps=2,
+    save_dir=save_dir,
+    evaluate_every=5,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "SGD"
+)
+```
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.5046666666666667 
+
+6. Caso 6:
+
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=2,
+    batch_size=5,
+    grad_acc_steps=2,
+    save_dir=save_dir,
+    evaluate_every=6,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "AdamW"
+)
+```
+Retriever Recall: 0.52
+Retriever Mean Avg Precision: 0.2866666666666667
+
+7. Caso 7:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=1,
+    batch_size=6,
+    grad_acc_steps=4,
+    save_dir=save_dir,
+    evaluate_every=8,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "SGD"
+)
+```
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.5046666666666667
+
+8. Caso 8:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=2,
+    batch_size=6,
+    grad_acc_steps=6,
+    save_dir=save_dir,
+    evaluate_every=10,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "SGD"
+)
+```
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.5046666666666667
+
+9. Caso 9:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=2,
+    batch_size=10,
+    grad_acc_steps=8,
+    save_dir=save_dir,
+    evaluate_every=5,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "SGD"
+)
+```
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.5046666666666667
+
+10. Caso 10:
+```python
+retriever.train(
+    data_dir=doc_dir,
+    train_filename=train_filename,
+    dev_filename=dev_filename,
+    test_filename=test_filename,
+    n_epochs=3,
+    batch_size=4,
+    grad_acc_steps=10,
+    save_dir=save_dir,
+    evaluate_every=5,
+    embed_title=True,
+    num_positives=1,
+    num_hard_negatives=1,
+    optimizer_name = "SGD"
+)
+```
+
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.5046666666666667
+
+
 
 #### Modelo sin entrenar:
 
