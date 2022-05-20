@@ -43,8 +43,6 @@ docker run --name kib01-test --net elastic -p 5601:5601 -e "ELASTICSEARCH_HOSTS=
 2. Para el resto de las ejecuciones:
 ```bash
 docker start kib01-test -a
-
-
 ```
 
 3. Para acceder a Kibana, ir al link `http://localhost:5601`
@@ -259,11 +257,6 @@ Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y
 
 ### Evaluacion:
 
-#### Modelo pre-entrenado:
-
-Retriever Recall: 0.56
-Retriever Mean Avg Precision: 0.32666666666666655
-
 #### Con hiperparametros:
 
 Se pone el parametro open_domain que nos da resultado positivo si la respuesta esta en los pasages recuperados, si es falso solo da verdad si recupera el documento en especifico. 
@@ -297,18 +290,20 @@ retriever.train(
     dev_filename=dev_filename,
     test_filename=dev_filename,
     n_epochs=1,
-    batch_size=4,
-    grad_acc_steps=2,
+    batch_size=8,
+    grad_acc_steps=1,
     save_dir=save_dir,
-    evaluate_every=8, #Aqui
+    evaluate_every=40,
     embed_title=True,
     num_positives=1,
-    num_hard_negatives=1,
+    num_hard_negatives=2,
+    optimizer_name = "SGD",
+    learning_rate = 1e-6
 )
 ```
 
-Retriever Recall: 0.6
-Retriever Mean Avg Precision: 0.47666666666666674
+Retriever Recall: 0.68
+Retriever Mean Avg Precision: 0.49933333333333335
 
 
 
@@ -488,6 +483,11 @@ retriever.train(
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.5076666666666667
 
+##### Training and CUDA
+
+Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`.
+
+`pip install torch==1.10.1+cu102 torchvision==0.11.2+cu102 torchaudio==0.10.1 -f https://download.pytorch.org/whl/torch_stable.html`
 
 
 #### Modelo sin entrenar:

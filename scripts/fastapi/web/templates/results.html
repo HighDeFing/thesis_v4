@@ -51,9 +51,10 @@
 									<h3> <b>{{ res['meta']['path'] }}</b> </h3>
 									<h4> <b>Titulo:</b> {{ res['meta']['title'] }} </h4>
 									<h5> <b>Escuela:</b> {{ res['meta']['school'] }}</h5>
-									<h6> <b>Año:</b> {{ res['meta']['year'] }} </h5>
+									<h6> <b>Año:</b> {{ res['meta']['year'] }} </h6>
+									<h6> <b>Autor:</b> {{ res['meta']['author'] }} </h6>
 									<h7> <b>Relevancia:</b> {{ res['score'] }}</h7>
-											<p>{{res['content'][:500]}}</p>
+											<p>{{res['content'][:1000]}} [...]</p>
 									{% endfor %}
 										
 								</section>

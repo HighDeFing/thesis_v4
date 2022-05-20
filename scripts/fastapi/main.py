@@ -19,11 +19,28 @@ data = json.load(f)
 
 model_path = "../../notebooks/models/model_big"
 
+model_9 = '../../notebooks/models/model_9'
+model_10 = '../../notebooks/models/model_10'
+
+model_4 = '../../notebooks/models/model_4'
+model_6 = '../../notebooks/models/model_6'
+
 # Dense retriever
-#haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_path)
+
+#hyperparameters
+# haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_9)
+haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_10)
+# haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_4)
+# haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_6)
+
+#barebones
+
+# haystack = Haystack_module(option="Dense", pipe_line_op = "document")
+
 
 #Elastic search retriever
-haystack = Haystack_module(option="ES", pipe_line_op = "document")
+#haystack = Haystack_module(option="ES", pipe_line_op = "document")
+
 
 #haystack.init_QAPipeline()
 #elastic_pipe = haystack.get_QAPipeline()
@@ -86,11 +103,12 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
     #result = document_pipe.run(query, params={"Retriever": {"top_k": 100}})
     #print_documents(result, max_text_len=500, print_name=True, print_meta=True)
     #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10, "filters": {"school": schools}}, "Reader": {"top_k": 3}})
-    result = document_pipe.run(query=query, params={"Retriever": {"top_k": 10}})
+    result = document_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "filters": {"school": schools}})
     #print_answers(result, details="all", max_text_len=200)
     #print_documents(result, max_text_len=100, print_name=True, print_meta=True)
     #ansObj = Answer_result(result)
     #ansObj = ansObj.json_object()
+    #print(result)
     ansObj = Document_result(result)
     ansObj = ansObj.json_object()
     #ansObj = "something"
