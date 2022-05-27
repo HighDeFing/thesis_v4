@@ -282,6 +282,11 @@ retriever.train(
 Retriever Recall: 0.64
 Retriever Mean Avg Precision: 0.456
 
+1.1 DEV SET
+
+Retriever Recall: 0.7083333333333334
+Retriever Mean Avg Precision: 0.39375
+
 2. Caso 2:
 ```python
 retriever.train(
@@ -304,6 +309,11 @@ retriever.train(
 
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.49933333333333335
+
+2.1. DEV SET
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.4993055555555556
 
 
 
@@ -328,6 +338,11 @@ retriever.train(
 Retriever Recall: 0.6
 Retriever Mean Avg Precision: 0.456
 
+3.1. DEV SET
+
+Retriever Recall: 0.625
+Retriever Mean Avg Precision: 0.3541666666666667
+
 4. Caso 4:
 ```python
 retriever.train(
@@ -348,6 +363,11 @@ retriever.train(
 
 Retriever Recall: 0.52
 Retriever Mean Avg Precision: 0.36333333333333334
+
+4.1. DEV SET
+
+Retriever Recall: 0.5416666666666666
+Retriever Mean Avg Precision: 0.25625000000000003
 
 5. Caso 5:
 ```python
@@ -371,6 +391,11 @@ retriever.train(
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.5076666666666667
 
+5.1. DEV SET
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5256944444444445
+
 6. Caso 6:
 
 ```python
@@ -392,6 +417,11 @@ retriever.train(
 ```
 Retriever Recall: 0.48
 Retriever Mean Avg Precision: 0.38333333333333336
+
+6.1. DEV SET
+
+Retriever Recall: 0.5416666666666666
+Retriever Mean Avg Precision: 0.2965277777777778
 
 7. Caso 7:
 ```python
@@ -415,6 +445,11 @@ retriever.train(
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.5076666666666667
 
+7.1. DEV SET
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5027777777777778
+
 8. Caso 8:
 ```python
 retriever.train(
@@ -436,6 +471,11 @@ retriever.train(
 
 Retriever Recall: 0.6
 Retriever Mean Avg Precision: 0.4866666666666667
+
+8.1. DEV SET
+
+Retriever Recall: 0.625
+Retriever Mean Avg Precision: 0.36944444444444446
 
 9. Caso 9:
 ```python
@@ -460,6 +500,11 @@ retriever.train(
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.5076666666666667
 
+9.1. DEV SET 
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5256944444444445
+
 10. Caso 10:
 ```python
 retriever.train(
@@ -483,6 +528,11 @@ retriever.train(
 Retriever Recall: 0.68
 Retriever Mean Avg Precision: 0.5076666666666667
 
+10.1. DEV SET
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5256944444444445
+
 ##### Training and CUDA
 
 Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`.
@@ -492,13 +542,36 @@ Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`
 
 #### Modelo sin entrenar:
 
+Retriever Recall: 0.68
+Retriever Mean Avg Precision: 0.5076666666666667
+
+##### DEV SET
+
 Retriever Recall: 0.75
 Retriever Mean Avg Precision: 0.5256944444444445
+
+
+#### Modelo sin entrenar viejo:
+
+Retriever Recall: 0.28
+Retriever Mean Avg Precision: 0.19
+
+##### DEV SET
+
+Retriever Recall: 0.3333333333333333
+Retriever Mean Avg Precision: 0.21319444444444444
 
 #### Modelo estadistico BM25:
 
 Retriever Recall: 0.56
-Retriever Mean Avg Precision: 0.4693333333333333
+Retriever Mean Avg Precision: 0.4793333333333333
+
+##### DEV SET
+
+Retriever Recall: 0.7083333333333334
+Retriever Mean Avg Precision: 0.5305555555555556
+
+
 
 
 ## CUDA and GPU

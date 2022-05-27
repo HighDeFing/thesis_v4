@@ -204,8 +204,8 @@ if __name__ == "__main__":
     # elastic.write_files_from_csv_Sparse(csv_source)
 
     ## Bare bones
-    # elastic = Haystack_module(option="Dense")
-    # elastic.write_files_from_csv_Dense(csv_source)
+    elastic = Haystack_module(option="Dense")
+    elastic.write_files_from_csv_Dense(csv_source)
 
     ## model_4
     #elastic = Haystack_module(option="Dense", dense_model_path=model_4)
@@ -220,8 +220,13 @@ if __name__ == "__main__":
     # elastic.write_files_from_csv_Dense(csv_source)
 
     ## model_10
-    elastic = Haystack_module(option="Dense", dense_model_path=model_10)
-    elastic.write_files_from_csv_Dense(csv_source)
+    #elastic = Haystack_module(option="Dense", dense_model_path=model_10)
+    #elastic.write_files_from_csv_Dense(csv_source)
+
+    ## Old Bare Bones
+    # elastic = Haystack_module(option="Dense")
+    # elastic.write_files_from_csv_Dense(csv_source)
+
 
     #model_9
     # model_path = model_9

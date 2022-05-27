@@ -29,13 +29,13 @@ model_6 = '../../notebooks/models/model_6'
 
 #hyperparameters
 # haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_9)
-haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_10)
+# haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_10)
 # haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_4)
 # haystack = Haystack_module(option="Dense", pipe_line_op = "document", dense_model_path=model_6)
 
 #barebones
 
-# haystack = Haystack_module(option="Dense", pipe_line_op = "document")
+haystack = Haystack_module(option="Dense", pipe_line_op = "document")
 
 
 #Elastic search retriever
