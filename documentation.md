@@ -106,12 +106,13 @@ En este archivo se ejecuta scraperv3.py con el paramentro de cuantas tesis se de
 
 2. Este paso genera un archivo en csv_files llamado url_thesis_{#numero_tesis}.csv donde #numero de tesis es la cantidad especificada en el paso anterior. Ejemplo: url_thesis_250.csv
 
-3. Luego de realizar el scraping es necesario descargar la tesis, para hacerlo vamos a la carpeta de download_files y ejecutamos el script thesis_downloader colocando en la `download_from_file` aqui colocamos el path dond esta el archivo anterior. Ejemplo ./csv_files/url_thesis_250.csv
+3. Luego de realizar el scraping es necesario descargar la tesis, para hacerlo vamos a la carpeta de download_files y ejecutamos el script thesis_downloader colocando en la `download_from_file` aqui colocamos el path donde esta el archivo anterior. Ejemplo ./csv_files/url_thesis_250.csv
 
-4. Luego de descargar los archivos procedemos a verificar si son texto o imagenes que necesitar OCR, para esto utilizamos el criterio de clasificacion descrito en la parte de cristerio de clasificacion.
-Ejecutamos con el archivo de fuente y el archivo de destino con un csv, este programa crea una columna donde se determina si es texto o es imagenes. Se encuentra en preprocessing_files `index_scan.py`
+4. Se tiene que verificar si todos los archivos se descargaron, esto se realiza meidante el archivo que se encuentra en scripts preprocessing_files, `check_existance.py`.
 
-5. Clasificar la escuela: Este paso es realizado por un notebook, en la carpeta notebooks, el archivo school_matcher.ipynb.
+5. Luego de descargar los archivos y verificar su existencia procedemos a verificar si son texto o imagenes que necesitar OCR, para esto utilizamos el criterio de clasificacion descrito en la parte de criterio de clasificacion. Este archivo se encuentra en notebooks `delete_not_exist.ipynb`. 
+
+6. Clasificar la escuela: Este paso es realizado por un notebook, en la carpeta notebooks, el archivo `school_matcher.ipynb`.
 
 5.1. Instalar jupyter notebook 
 `pip install notebook==6.4.10`
@@ -136,6 +137,8 @@ Para usar spacy ejecutar
 6.3. Modelo en español `python -m spacy download es_core_news_sm`
 
 Todo esto es parte del paso anterior, para ejecutar el notebook.
+
+
 
 
 ## Tiempos:
@@ -180,10 +183,18 @@ No es sensible a mayusculas.
 La oracion de especificacion de la escuela tiene que ser exacta, esta se puede ser encontrar en el encabezado o por la firma del acta.
 Por lo tanto se especifica en que paginas se buscara la escuela en las primeras 10 paginas si ocurre 1 match entonces se declarara esa como la escuela.
 
+Se utilizo apache tika para obtener el texto de las carreras, el hecho de utilizar apache tika en vez de pdfplumber, es que apache tika es considerablemente mejor al tratar con acentos y pdfs, es en general mas preciso obteniendo las carreras.
+
+Solo se comprobo en las primeras 6000 palabras y las ultimas 6000 paginas si habia un encuentro con una carrera. Esto ayudo a que el procesado de cada archivo fuera mas rapido, debido a que si se trata de procesar toda la tesis en apache tika esto daba errores.
+
+La memoria y procesamiento del matcher tuvo que hacerse por batches de 20 con cada uno teniendo al alrededor de 380 tesis. Despues cada uno de los vectores resultados se unieron para dar el dataframe final con todas las tesis.
+
+No se tiene una metrica exacta de cual fue la precision de carreras clasificadas apropiadamente, pero realizando revisiones rapidas se nota que la mayoria fue clasificada correctamente. 
+
 ## Para scraping
 
 1. Ejecutar scraperv3 en scraper_files, poner la cantidad de tesis a poner en la tabla.
-2. Descargar laas tesis en thesis_downloader.py en download_files, recordar colocar el nombre del csv donde estan laos url de las tesis del paso anterior.
+2. Descargar las tesis en thesis_downloader.py en download_files, recordar colocar el nombre del csv donde estan laos url de las tesis del paso anterior.
 3. Ejecutar luego index_scan en preprocessing_files, recordar cambiar los parametros que son.
 
 ## Evaluacion
