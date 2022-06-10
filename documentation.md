@@ -266,7 +266,7 @@ Como se tiene una version mas vieja de pip recordad install haystack con:
 
 Si se etiquetan 20 tesis con 5 preguntas da un total de 100 pares de preguntas y respuestas.
 
-### Evaluacion:
+### Evaluacion con los top=5:
 
 #### Con hiperparametros:
 
@@ -544,13 +544,6 @@ Retriever Mean Avg Precision: 0.5076666666666667
 Retriever Recall: 0.75
 Retriever Mean Avg Precision: 0.5256944444444445
 
-##### Training and CUDA
-
-Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`.
-
-`pip install torch==1.10.1+cu102 torchvision==0.11.2+cu102 torchaudio==0.10.1 -f https://download.pytorch.org/whl/torch_stable.html`
-
-
 #### Modelo sin entrenar:
 
 Retriever Recall: 0.68
@@ -581,6 +574,149 @@ Retriever Mean Avg Precision: 0.4793333333333333
 
 Retriever Recall: 0.7083333333333334
 Retriever Mean Avg Precision: 0.5305555555555556
+
+
+### Evaluacion con los top=10:
+
+1. Caso 1:
+Retriever Recall: 0.68
+Retriever Mean Avg Precision: 0.42538095238095236
+
+1.1. DEV SET:
+Retriever Recall: 0.7916666666666666
+Retriever Mean Avg Precision: 0.40433201058201057
+
+2. Caso 2:
+
+Retriever Recall: 0.8
+Retriever Mean Avg Precision: 0.5023809523809525
+
+2.1. DEV SET:
+
+Retriever Recall: 0.7916666666666666
+Retriever Mean Avg Precision: 0.50625
+
+3. Caso 3:
+
+Retriever Recall: 0.72
+Retriever Mean Avg Precision: 0.4754920634920636
+
+3.1. DEV SET:
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.373015873015873
+
+4. Caso 4:
+
+Retriever Recall: 0.6
+Retriever Mean Avg Precision: 0.3734920634920635
+
+4.1. DEV SET:
+
+Retriever Recall: 0.7083333333333334
+Retriever Mean Avg Precision: 0.2785714285714286
+
+5. Caso 5:
+
+Retriever Recall: 0.84
+Retriever Mean Avg Precision: 0.5166666666666667
+
+5.1. DEV SET:
+
+Retriever Recall: 0.8333333333333334
+Retriever Mean Avg Precision: 0.5385912698412699
+
+6. Caso 6:
+
+Retriever Recall: 0.64
+Retriever Mean Avg Precision: 0.40801587301587305
+
+6.1. DEV SET:
+
+Retriever Recall: 0.6666666666666666
+Retriever Mean Avg Precision: 0.31636904761904766
+
+7. Caso 7:
+
+Retriever Recall: 0.84
+Retriever Mean Avg Precision: 0.5137619047619048
+
+7.1. DEV SET:
+
+Retriever Recall: 0.8333333333333334
+Retriever Mean Avg Precision: 0.5143518518518518
+
+8. Caso 8:
+
+Retriever Recall: 0.8
+Retriever Mean Avg Precision: 0.49866666666666676
+
+8.1. DEV SET:
+
+Retriever Recall: 0.7916666666666666
+Retriever Mean Avg Precision: 0.39523809523809533
+
+9. Caso 9:
+
+Retriever Recall: 0.84
+Retriever Mean Avg Precision: 0.5166666666666667
+
+9.1. DEV SET:
+
+Retriever Recall: 0.8333333333333334
+Retriever Mean Avg Precision: 0.5385912698412699
+
+10. Caso 10:
+
+Retriever Recall: 0.84
+Retriever Mean Avg Precision: 0.5166666666666667
+
+10.1. DEV SET:
+
+Retriever Recall: 0.8333333333333334
+Retriever Mean Avg Precision: 0.5385912698412699
+
+
+#### Modelo sin entrenar TOP 10:
+
+Retriever Recall: 0.84
+Retriever Mean Avg Precision: 0.5166666666666667
+
+##### DEV SET:
+
+Retriever Recall: 0.8333333333333334
+Retriever Mean Avg Precision: 0.5385912698412699
+
+#### Modelo estadistico BM25 TOP10:
+
+Retriever Recall: 0.6
+Retriever Mean Avg Precision: 0.47171428571428564
+
+##### DEV SET:
+
+Retriever Recall: 0.75
+Retriever Mean Avg Precision: 0.5351851851851852
+
+#### Modelo sin entrenar viejo TOP 10:
+
+Retriever Recall: 0.4
+Retriever Mean Avg Precision: 0.204
+
+##### DEV SET:
+
+Retriever Recall: 0.4583333333333333
+Retriever Mean Avg Precision: 0.23303571428571426
+
+
+##### Training and CUDA
+
+Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`.
+
+`pip install torch==1.10.1+cu102 torchvision==0.11.2+cu102 torchaudio==0.10.1 -f https://download.pytorch.org/whl/torch_stable.html`
+
+
+
+
 
 
 
