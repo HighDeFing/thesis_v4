@@ -712,11 +712,7 @@ Retriever Mean Avg Precision: 0.23303571428571426
 
 Para hacer que funcionara el proceso de entrenamiento se necesita pytorch `1.10`.
 
-`pip install torch==1.10.1+cu102 torchvision==0.11.2+cu102 torchaudio==0.10.1 -f https://download.pytorch.org/whl/torch_stable.html`
-
-
-
-
+`pip install --upgrade --force-reinstall torch==1.10.1+cu102 torchvision==0.11.2+cu102 torchaudio==0.10.1 -f https://download.pytorch.org/whl/torch_stable.html`
 
 
 

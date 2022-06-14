@@ -156,7 +156,7 @@ class Haystack_module():
             clean_empty_lines=True,
             clean_whitespace=True,
             split_by="word",
-            split_length=400,
+            split_length=200,
             split_respect_sentence_boundary=True,
             split_overlap=0,
             language="es"
