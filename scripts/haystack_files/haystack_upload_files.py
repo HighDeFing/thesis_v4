@@ -71,7 +71,7 @@ class Haystack_module():
             self.dp_retriever = DensePassageRetriever(
             document_store=document_store,
             query_embedding_model="IIC/dpr-spanish-question_encoder-allqa-base",  #IIC/dpr-spanish-question_encoder-allqa-base #voidful/dpr-question_encoder-bert-base-multilingual
-            passage_embedding_model="IIC/dpr-spanish-passage_encoder-allqa-base", #IIC/dpr-spanish-passage_encoder-allqa-base #voidful/dpr-ctx_encoder-bert-base-multilingual
+            passage_embedding_model="IIC/dpr-spanish-question_encoder-allqa-base", #IIC/dpr-spanish-question_encoder-allqa-base #voidful/dpr-ctx_encoder-bert-base-multilingual
             use_gpu=True,
             batch_size = 64
             )
@@ -200,8 +200,8 @@ if __name__ == "__main__":
     csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica.csv"
 
     ## BM25 
-    # elastic = Haystack_module(option="ES")
-    # elastic.write_files_from_csv_Sparse(csv_source)
+    #elastic = Haystack_module(option="ES")
+    #elastic.write_files_from_csv_Sparse(csv_source)
 
     ## Bare bones
     elastic = Haystack_module(option="Dense")
@@ -220,12 +220,12 @@ if __name__ == "__main__":
     # elastic.write_files_from_csv_Dense(csv_source)
 
     ## model_10
-    #elastic = Haystack_module(option="Dense", dense_model_path=model_10)
-    #elastic.write_files_from_csv_Dense(csv_source)
+    # elastic = Haystack_module(option="Dense", dense_model_path=model_10)
+    # elastic.write_files_from_csv_Dense(csv_source)
 
     ## Old Bare Bones
-    # elastic = Haystack_module(option="Dense")
-    # elastic.write_files_from_csv_Dense(csv_source)
+    ## elastic = Haystack_module(option="Dense")
+    ## elastic.write_files_from_csv_Dense(csv_source)
 
 
     #model_9
