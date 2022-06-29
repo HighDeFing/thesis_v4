@@ -71,7 +71,7 @@ class Haystack_module():
             self.dp_retriever = DensePassageRetriever(
             document_store=document_store,
             query_embedding_model="IIC/dpr-spanish-question_encoder-allqa-base",  #IIC/dpr-spanish-question_encoder-allqa-base #voidful/dpr-question_encoder-bert-base-multilingual
-            passage_embedding_model="IIC/dpr-spanish-question_encoder-allqa-base", #IIC/dpr-spanish-question_encoder-allqa-base #voidful/dpr-ctx_encoder-bert-base-multilingual
+            passage_embedding_model="IIC/dpr-spanish-passage_encoder-squades-base", #IIC/dpr-spanish-passage_encoder-squades-base #voidful/dpr-ctx_encoder-bert-base-multilingual
             use_gpu=True,
             batch_size = 64
             )
