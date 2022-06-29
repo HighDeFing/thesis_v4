@@ -7,3 +7,8 @@
 ## Preview de los resultados
 
 ![url_advanced_search](https://user-images.githubusercontent.com/39177022/169580999-c57ccd4f-e090-4483-8053-0226bd63cf80.png)
+
+
+## Leer documentation.md
+
+Se debe leer documentation.md para tener una idea de como utilizar este programa.
