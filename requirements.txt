@@ -8,6 +8,6 @@ farm-haystack[ocr]
 pdfplumber==0.6.0
 Unidecode==1.3.4
 beautifulsoup4==4.10.0
-notebook==6.4.10
+notebook==6.4.12
 python-multipart
 uvicorn
