@@ -19,6 +19,7 @@
         <!-- Include the plugin's CSS and JS: -->
         <script type="text/javascript" src="{{ url_for('static', path='assets/multiselect/js/bootstrap-multiselect.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', path='assets/multiselect/css/bootstrap-multiselect.css') }}" type="text/css"/>
+		
 
 	</head>
 	<body class="is-preload">
@@ -44,32 +45,61 @@
 							<!-- Content -->
 								<section>
 									<header class="main">
-										<h1>Generic</h1>
+										<h1>Busqueda Avanzada</h1>
 									</header>
 
                                     <!-- Advanced search-->
                                     <div class="row gtr-0">
-                                        <div class="col-8 col-12-medium">
+                                        <div class="col-12-xsmall col-12-xlarge">
                                             <form method="POST">
-                                                <h3>Termino de búsqueda</h3>
+                                                
+												<label for="start">Fecha de inicio:</label>
+
+													<input type="date" id="start_date" name="start_date"
+														value="2000-01-01"
+														min="2000-01-01" max="2022-12-31">
+
+													<label for="end">Fecha final:</label>
+
+													<input type="date" id="end_date" name="end_date"
+														value="2022-12-31"
+														min="2000-01-01" max="2022-12-31">
+
+												<h3>Termino de búsqueda</h3>
+
                                                 <div class="row gtr-uniform">
-                                                    <div class="col-5 col-12-xsmall">
-                                                        <input type="text" name="search_query" id="search_query" value="" placeholder="Name" />
+                                                    <div class="col-3 col-4-xsmall">
+                                                        <input type="text" name="search_query" id="search_query" value="" placeholder="Query" />
                                                     </div>
-                                                    <div class="col-3 col-12-xsmall">
-                                                        <select name="category" id="category">
+                                                    <!-- <div class="col-3 col-12-xsmall">
+                                                        <select name="category" id="category" >
                                                             <option value="">- Category -</option>
-                                                            <option value="Manufacturing">Manufacturing</option>
-                                                            <option value="Shipping">Shipping</option>
-                                                            <option value="Administration">Administration</option>
-                                                            <option value="Human Resources">Human Resources</option>
+                                                            <option value="Document" selected>Documento</option>
+                                                            <option value="Tutor">Tutor</option>
+                                                            <option value="Autor">Autor</option>
                                                         </select>
-                                                    </div>
+                                                    </div> -->
+
+												<h5>Autor:</h5>
+												<div class="col-1-xsmall col-4-xsmall">
+													<input type="text" name="search_author" id="search_author" value="" placeholder="Autor" />
+												</div>
+
+												<h5>Tutor:</h5>
+												<div class="col-1-xsmall col-4-xsmall">
+													<input type="text" name="search_tutor" id="search_tutor" value="" placeholder="Tutor" />
+												</div>
+													
                                                     <div class="col-4 col-12-xsmall">
                                                         <ul class="actions">
                                                             <li><input type="submit" value="Buscar" class="primary" /></li>
                                                         </ul>
                                                     </div>
+
+													<div class="col-1-xsmall col-4-xsmall">
+														<input type="checkbox" id="unique_res" name="unique_res">
+														<label for="unique_res">Resultados unicos</label>
+													</div>
                                                 </div>
                                                 <hr />
                                                 <h3>Carreras</h3>
@@ -93,9 +123,9 @@
 													</div>
 												</div>
 												<!-- <p>Items: {{ escuelas }}</p> -->
-												<div class="col-5 col-12-medium">
+												<!-- <div class="col-5 col-12-medium">
 												<input type="submit" value="Send Message" class="primary">
-												</div>
+												</div> -->
                                             </form>
                                         </div>
                                     </div>
@@ -273,8 +303,8 @@
 			<script src="{{ url_for('static', path='assets/js/breakpoints.min.js')}}"></script>
 			<script src="{{ url_for('static', path='assets/js/util.js')}}"></script>
 			<script src="{{ url_for('static', path='assets/js/main.js')}}"></script>
-        
-            
+
+			           
 
 	</body>
 </html>

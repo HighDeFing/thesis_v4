@@ -11,8 +11,15 @@ from scripts.haystack_files.haystack_upload_files import Haystack_module
 from haystack.utils import print_answers, print_documents
 from schemas import SearchForm, SearchSimpleForm
 from parser import Answer_result, Document_result
-
+from datetime import datetime, date
+from elasticsearch import Elasticsearch
 import json
+import unidecode
+
+
+es = Elasticsearch('http://localhost:9200')
+
+
 
 f = open('web/static/data/escuelas.json')
 data = json.load(f)
@@ -84,12 +91,22 @@ async def read_item(request: Request):
 async def read_item(request: Request):
     return templates.TemplateResponse("generic.html", {"request": request})
 
-@app.get("/results.html/{search_query}/{facultad_name}", response_class=HTMLResponse)
-@app.get("/results.html/{search_query}?/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html//{unique_res}////{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}/{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}/{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}/{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}/{unique_res}///{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}?/{unique_res}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html/{search_query}/{unique_res}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html//{facultad_name}", response_class=HTMLResponse)
-async def read_item(request: Request, search_query: Optional[str] = Query(None), facultad_name: Optional[str] = Query(None)):
+@app.get("/results.html//{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html//{unique_res}/{facultad_name}", response_class=HTMLResponse)
+async def read_item(request: Request, search_query: Optional[str] = Query(None), unique_res: Optional[bool] = Query(None), search_author: Optional[str] = Query(None), search_tutor: Optional[str] = Query(None), start_date: Optional[str] = Query(None), end_date: Optional[str] = Query(None), facultad_name: Optional[str] = Query(None)):
     #print(search_query)
     #print(facultad_name) , #"filters": {"school":facultad_name}
+    #print("in result", search_author)
+    #print("in result", search_tutor)
+
     if facultad_name:
         schools = parse_schools(facultad_name)
     else:
@@ -97,20 +114,103 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
         for facultad in data:
             for sch in facultad['escuelas']:
                 schools.append(sch)
-    print(schools)
+    #print(schools)
     query = search_query
     #print(facultad_name[1])
     #result = document_pipe.run(query, params={"Retriever": {"top_k": 100}})
     #print_documents(result, max_text_len=500, print_name=True, print_meta=True)
     #result = elastic_pipe.run(query=query, params={"Retriever": {"top_k": 10, "filters": {"school": schools}}, "Reader": {"top_k": 3}})
-    result = document_pipe.run(query=query, params={"Retriever": {"top_k": 10}, "filters": {"school": schools}})
+    print(start_date)
+    if(start_date == None):
+        start_date = "2000-01-01"
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = datetime.strftime(start_date, "%Y-%m-%d")
+
+    if(end_date == None):
+       end_date = date.today()
+       end_date = datetime.strftime(end_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date = datetime.strftime(end_date, "%Y-%m-%d")
+
+    #print("in result", start_date)
+    #print("in result", end_date)
+
+    filter_tap = { 
+        "$and": {
+           "school": schools,
+           "year": {"$gt": start_date, "$lt": end_date}
+        }
+    }
+
+    if query == None:
+        query = "Universidad"
+
+        
+    if search_author != None:
+        search_author = unidecode.unidecode(search_author)
+        search_author = search_author.lower()
+        value = search_author
+
+        resp = es.search(index="document", size=10000, query={
+            "bool": {
+                "must": {
+                    "wildcard": {
+                    "author_uncased": {
+                        "value": "*" + value + "*"
+                            }
+                        }
+                    },
+                    "filter":{
+                        "range": {
+                        "year" : {"gt": start_date, "lt": end_date}
+                        }
+                    }
+                }
+            },
+            _source =  [
+                    "author",
+                    "author_uncased",
+                    "content",
+                    "path",
+                    "school",
+                    "size",
+                    "title",
+                    "year"
+                ]
+        )
+        #this is the author list that searches in elastic search.
+        author_list = []
+        for hit in resp['hits']['hits']:
+            #print("%(author_uncased)s" % hit["_source"])
+            #print(len(hit))
+            #print(hit)
+            #count += 1
+            author_list.append(hit["_source"]['author_uncased'])
+        author_list = [*set(author_list)]
+
+        print("author_list", author_list)
+
+        filter_tap = { 
+        "$and": {
+           "school": schools,
+           "year": {"$gt": start_date, "$lt": end_date},
+           "author_uncased" : {"$in": author_list}
+            }
+        }
+
+    # result = document_pipe.run(query=query, params={"Retriever": {"top_k": 15}, "filters": {"school": schools}}
+    result = document_pipe.run(query=query, params={"Retriever": {"top_k": 15}, "filters": filter_tap})
+
     #print_answers(result, details="all", max_text_len=200)
     #print_documents(result, max_text_len=100, print_name=True, print_meta=True)
     #ansObj = Answer_result(result)
     #ansObj = ansObj.json_object()
     #print(result)
     ansObj = Document_result(result)
+    if(unique_res):
+        ansObj.make_unique_results()
     ansObj = ansObj.json_object()
+    #print(ansObj)
     #ansObj = "something"
 
     #print("data:", type(ansObj))
@@ -120,21 +220,30 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
 
     return templates.TemplateResponse("results.html", {"request": request, "respuestas": ansObj})
 
-@app.post("/results.html/{search_query}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}////{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}/{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}/{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}/{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}/{unique_res}///{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}?/{unique_res}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html/{search_query}/{unique_res}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html//{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}/{facultad_name}", response_class=HTMLResponse)
 async def handle_form(request: Request, form_data:  SearchSimpleForm = Depends(SearchSimpleForm.as_form)):
     #print(form_data)
     search_query = form_data.query
-
     schools = []
     for facultad in data:
         for sch in facultad['escuela']:
             schools.append(sch)
     facultad_name = schools
-
+    unique_res = True
+    if search_query == "":
+        search_query = "Universidad"
         #search in all schools if none is giving
     #headers={"form_data": form_data}
-    return RedirectResponse(f"/results.html/{search_query}/{facultad_name}",  status_code=303)
+    return RedirectResponse(f"/results.html/{search_query}/{unique_res}/{facultad_name}",  status_code=303)
 
 @app.get("/search", response_class=HTMLResponse)
 @app.get("/search.html", response_class=HTMLResponse)
@@ -148,6 +257,7 @@ async def handle_form(request: Request, form_data:  SearchForm = Depends(SearchF
     #print(form_data)
     search_query = form_data.search_query
     query = form_data.query
+    #print(query)
     if search_query:
         pass
     else:
@@ -164,9 +274,21 @@ async def handle_form(request: Request, form_data:  SearchForm = Depends(SearchF
                 schools.append(sch)
         facultad_name = schools
 
+    search_tutor = form_data.search_tutor
+    search_author = form_data.search_author
+    start_date = form_data.start_date
+    end_date = form_data.end_date
+    unique_res = form_data.unique_res
+    #print(unique_res)
+    if start_date == "":
+        start_date = "2000-01-01"
+    if end_date == "":
+        end_date = date.today()
+        end_date = datetime.strftime(end_date, "%Y-%m-%d")
+
         #search in all schools if none is giving
     #headers={"form_data": form_data}
-    return RedirectResponse(f"/results.html/{search_query}/{facultad_name}",  status_code=303)
+    return RedirectResponse(f"/results.html/{search_query}/{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}",  status_code=303)
 
 @app.get("/test.html", response_class=HTMLResponse)
 async def read_item(request: Request):

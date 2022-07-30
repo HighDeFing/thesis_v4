@@ -94,7 +94,10 @@ class Haystack_module():
 
 
     def write_file_in_elastic(self, document_store, retriever, option, file_source, school, title, author, year, size, path):
-        meta_data = { "school": str(school), "title": str(title), "author": str(author), "year": str(year), "size": str(size), "path": str(path) }
+        author_uncased = unidecode.unidecode(str(author))
+        author_uncased = author_uncased.lower()
+
+        meta_data = { "school": str(school), "title": str(title), "author": str(author), "author_uncased": str(author_uncased), "year": str(year), "size": str(size), "path": str(path) }
         # print(meta_data)
         converter = PDFToTextConverter(remove_numeric_tables=True, valid_languages=["es"])
         docs = converter.convert(file_path=file_source, meta=meta_data)
@@ -197,7 +200,7 @@ class Haystack_module():
 
 if __name__ == "__main__":
 
-    csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica.csv"
+    csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica_date.csv"
 
     ## BM25 
     #elastic = Haystack_module(option="ES")

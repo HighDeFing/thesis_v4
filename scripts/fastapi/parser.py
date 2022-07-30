@@ -1,5 +1,6 @@
 import json
 from numpy import size
+import pandas as pd
 
 
 class Answer_result():
@@ -60,13 +61,30 @@ class Answer_result():
 class Document_result():
     def __init__(self, results):
         self.a = [x.to_dict() for x in results["documents"]]
+        
         self.a_json = [x.to_json() for x in results["documents"]]
 
         self.a_json = [json.loads(x) for x in self.a_json]
 
         self.size_arr = len(self.a)
         #print(self.a_json)
+        #self.make_unique_results()
         self.a_json = self.round_json()
+
+    def make_unique_results(self):
+        #print(self.a_json)
+        path_list = []
+        for a in self.a_json:
+            path_list.append(a['meta']['path'])
+        path_list = [*set(path_list)]
+        print(path_list)
+        unique_list = []
+        cheked = []
+        for a in self.a_json:
+           if a['meta']['path'] in path_list and a['meta']['path'] not in cheked:
+               unique_list.append(a)
+               cheked.append(a['meta']['path'])
+        self.a_json = unique_list
     
     def round_json(self, round_by = 4):
         new_json = []
@@ -79,4 +97,7 @@ class Document_result():
     def json_object(self):
         return self.a_json
 
+class Author_result():
+    def __init__(self, results):
+        pass
 
