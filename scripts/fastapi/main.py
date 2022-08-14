@@ -71,6 +71,95 @@ def parse_schools(school_strings):
     #print(new_schools)
     return(new_schools)
 
+def get_list_elastic(option, name, start_date, end_date):
+    if option == "author":
+        search_author = name
+        search_author = unidecode.unidecode(search_author)
+        search_author = search_author.lower()
+        value = search_author
+
+        resp = es.search(index="document", size=10000, query={
+            "bool": {
+                "must": {
+                    "wildcard": {
+                    "author_uncased": {
+                        "value": "*" + value + "*"
+                            }
+                        }
+                    },
+                    "filter":{
+                        "range": {
+                        "year" : {"gt": start_date, "lt": end_date}
+                        }
+                    }
+                }
+            },
+            _source =  [
+                    "author",
+                    "author_uncased",
+                    "content",
+                    "path",
+                    "school",
+                    "size",
+                    "title",
+                    "year"
+                ]
+        )
+        #this is the author list that searches in elastic search.
+        author_list = []
+        for hit in resp['hits']['hits']:
+            #print("%(author_uncased)s" % hit["_source"])
+            #print(len(hit))
+            #print(hit)
+            #count += 1
+            author_list.append(hit["_source"]['author_uncased'])
+        author_list = [*set(author_list)]
+        return author_list
+    if option == "tutor":
+        search_tutor = name
+        search_tutor = unidecode.unidecode(search_tutor)
+        search_tutor = search_tutor.lower()
+        value = search_tutor
+
+        resp = es.search(index="document", size=10000, query={
+            "bool": {
+                "must": {
+                    "wildcard": {
+                    "tutor_uncased": {
+                        "value": "*" + value + "*"
+                            }
+                        }
+                    },
+                    "filter":{
+                        "range": {
+                        "year" : {"gt": start_date, "lt": end_date}
+                        }
+                    }
+                }
+            },
+            _source =  [
+                    "tutor",
+                    "tutor_uncased",
+                    "content",
+                    "path",
+                    "school",
+                    "size",
+                    "title",
+                    "year"
+                ]
+        )
+        #this is the author list that searches in elastic search.
+        tutor_list = []
+        for hit in resp['hits']['hits']:
+            #print("%(author_uncased)s" % hit["_source"])
+            #print(len(hit))
+            #print(hit)
+            #count += 1
+            tutor_list.append(hit["_source"]['tutor_uncased'])
+        tutor_list = [*set(tutor_list)]
+        return tutor_list
+
+
 
 app = FastAPI()
 
@@ -92,13 +181,15 @@ async def read_item(request: Request):
     return templates.TemplateResponse("generic.html", {"request": request})
 
 @app.get("/results.html//{unique_res}////{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html//{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html//{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}/{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}/{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}/{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}/{unique_res}///{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}?/{unique_res}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html/{search_query}/{unique_res}/{facultad_name}", response_class=HTMLResponse)
-@app.get("/results.html//{facultad_name}", response_class=HTMLResponse)
+@app.get("/results.html//{unique_res}///{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html//{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.get("/results.html//{unique_res}/{facultad_name}", response_class=HTMLResponse)
 async def read_item(request: Request, search_query: Optional[str] = Query(None), unique_res: Optional[bool] = Query(None), search_author: Optional[str] = Query(None), search_tutor: Optional[str] = Query(None), start_date: Optional[str] = Query(None), end_date: Optional[str] = Query(None), facultad_name: Optional[str] = Query(None)):
@@ -146,50 +237,8 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
         query = "Universidad"
 
         
-    if search_author != None:
-        search_author = unidecode.unidecode(search_author)
-        search_author = search_author.lower()
-        value = search_author
-
-        resp = es.search(index="document", size=10000, query={
-            "bool": {
-                "must": {
-                    "wildcard": {
-                    "author_uncased": {
-                        "value": "*" + value + "*"
-                            }
-                        }
-                    },
-                    "filter":{
-                        "range": {
-                        "year" : {"gt": start_date, "lt": end_date}
-                        }
-                    }
-                }
-            },
-            _source =  [
-                    "author",
-                    "author_uncased",
-                    "content",
-                    "path",
-                    "school",
-                    "size",
-                    "title",
-                    "year"
-                ]
-        )
-        #this is the author list that searches in elastic search.
-        author_list = []
-        for hit in resp['hits']['hits']:
-            #print("%(author_uncased)s" % hit["_source"])
-            #print(len(hit))
-            #print(hit)
-            #count += 1
-            author_list.append(hit["_source"]['author_uncased'])
-        author_list = [*set(author_list)]
-
-        print("author_list", author_list)
-
+    if search_author != None and search_tutor==None:
+        author_list = get_list_elastic(option="author", name=search_author, start_date=start_date, end_date=end_date)
         filter_tap = { 
         "$and": {
            "school": schools,
@@ -197,6 +246,32 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
            "author_uncased" : {"$in": author_list}
             }
         }
+
+    if search_tutor != None and search_author == None:
+        tutor_list = get_list_elastic(option="tutor", name=search_tutor, start_date=start_date, end_date=end_date)
+        filter_tap = { 
+        "$and": {
+           "school": schools,
+           "year": {"$gt": start_date, "$lt": end_date},
+           "tutor_uncased" : {"$in": tutor_list}
+            }
+        }
+
+    if search_tutor != None and search_author != None:
+        author_list = get_list_elastic(option="author", name=search_author, start_date=start_date, end_date=end_date)
+        tutor_list = get_list_elastic(option="tutor", name=search_tutor, start_date=start_date, end_date=end_date)
+        filter_tap = { 
+        "$and": {
+           "school": schools,
+           "year": {"$gt": start_date, "$lt": end_date},
+           "tutor_uncased" : {"$in": tutor_list},
+           "author_uncased" : {"$in": author_list}
+            }
+        }
+        
+
+        #print("author_list", author_list)
+
 
     # result = document_pipe.run(query=query, params={"Retriever": {"top_k": 15}, "filters": {"school": schools}}
     result = document_pipe.run(query=query, params={"Retriever": {"top_k": 15}, "filters": filter_tap})
@@ -221,6 +296,8 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
     return templates.TemplateResponse("results.html", {"request": request, "respuestas": ansObj})
 
 @app.post("/results.html//{unique_res}////{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html/{search_query}/{unique_res}/{search_tutor}/{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html/{search_query}/{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html/{search_query}/{unique_res}/{search_tutor}//{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
@@ -228,6 +305,7 @@ async def read_item(request: Request, search_query: Optional[str] = Query(None),
 @app.post("/results.html/{search_query}?/{unique_res}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html/{search_query}/{unique_res}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html//{facultad_name}", response_class=HTMLResponse)
+@app.post("/results.html//{unique_res}///{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html//{unique_res}//{search_author}/{start_date}/{end_date}/{facultad_name}", response_class=HTMLResponse)
 @app.post("/results.html//{unique_res}/{facultad_name}", response_class=HTMLResponse)
 async def handle_form(request: Request, form_data:  SearchSimpleForm = Depends(SearchSimpleForm.as_form)):

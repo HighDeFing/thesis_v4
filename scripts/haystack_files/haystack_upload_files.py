@@ -93,11 +93,17 @@ class Haystack_module():
         return self.FARM_reader
 
 
-    def write_file_in_elastic(self, document_store, retriever, option, file_source, school, title, author, year, size, path):
+    def write_file_in_elastic(self, document_store, retriever, option, file_source, school, title, author, tutor, year, size, path):
         author_uncased = unidecode.unidecode(str(author))
         author_uncased = author_uncased.lower()
 
-        meta_data = { "school": str(school), "title": str(title), "author": str(author), "author_uncased": str(author_uncased), "year": str(year), "size": str(size), "path": str(path) }
+        tutor_uncased = unidecode.unidecode(str(tutor))
+        tutor_uncased = tutor_uncased.lower()
+
+
+        meta_data = { "school": str(school), "title": str(title), "author": str(author), "author_uncased": str(author_uncased), 
+        "tutor": str(tutor), "tutor_uncased": str(tutor_uncased),
+        "year": str(year), "size": str(size), "path": str(path) }
         # print(meta_data)
         converter = PDFToTextConverter(remove_numeric_tables=True, valid_languages=["es"])
         docs = converter.convert(file_path=file_source, meta=meta_data)
@@ -180,7 +186,7 @@ class Haystack_module():
         option = "dense" 
         
         write_vec(document_store = document_store, retriever = retriever, option = option, 
-        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"],
+        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"], tutor = df_head["thesis_tutor"],
         author = df_head["thesis_author"], year = df_head["thesis_year"], size = df_head["size"], path = df_head["path"])
 
     def write_files_from_csv_Sparse(self, csv_source):
@@ -194,13 +200,14 @@ class Haystack_module():
         option = "sparse" 
 
         write_vec(document_store = document_store, retriever = retriever, option = option, 
-        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"],
+        file_source = df_head['path'], school = df_head["school_complex"], title = df_head["thesis_title"], tutor = df_head["thesis_tutor"],
         author = df_head["thesis_author"], year = df_head["thesis_year"], size = df_head["size"], path = df_head["path"])
 
 
 if __name__ == "__main__":
 
-    csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica_date.csv"
+    #csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica_date.csv"
+    csv_source = 'scripts/haystack_files/data/thesis_comp_ingelec_quimica_date_head.csv'
 
     ## BM25 
     #elastic = Haystack_module(option="ES")
