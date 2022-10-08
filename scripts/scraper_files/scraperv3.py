@@ -89,5 +89,5 @@ def find_n_rows(n_rows = 5, dest_file = './csv_files/url_thesis_{}.csv', url_lin
     csv_file.close()
 
 if __name__ == '__main__':
-    find_n_rows(8211)
+    find_n_rows(8212)
 

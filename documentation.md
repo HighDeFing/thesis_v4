@@ -138,16 +138,26 @@ Para usar spacy ejecutar
 
 Todo esto es parte del paso anterior, para ejecutar el notebook.
 
+7. Clasificar tutor: Este paso es realizado por un notebook, en la carpeta notebooks, el archivo el archivo `tutor_matcher.ipynb`
+
 
 
 
 ## Tiempos:
 
-- Para verificar los errores de saber si una tesis existe y es pdf lejible con 8211 tesis se tardo 2 horas.
+- Para descargar todas las 8211 tesis se tardo 4 horas.
+
+- Para verificar los errores de saber si una tesis existe y es pdf legible con 8211 tesis se tardo 2 horas.
 
 - Para identificar si es imagen o es pdf con texto se tardo 5 horas.
 
-- Para clasificar e identificar la carrera de la tesis se tardo
+- Para clasificar e identificar la carrera de la tesis se tardo 3 horas.
+
+- Para clasificar los tutores se tardo 2 horas.
+
+- Para entrenar cada modelo se tardo en promedio 5-10 minutos.
+
+- Para indexar 90 documentos se tardo 2.5 horas.
 
 
 
@@ -195,7 +205,7 @@ No se tiene una metrica exacta de cual fue la precision de carreras clasificadas
 
 1. Ejecutar scraperv3 en scraper_files, poner la cantidad de tesis a poner en la tabla.
 2. Descargar las tesis en thesis_downloader.py en download_files, recordar colocar el nombre del csv donde estan laos url de las tesis del paso anterior.
-3. Ejecutar luego index_scan en preprocessing_files, recordar cambiar los parametros que son.
+3. Ejecutar luego notebooks/notebooks/delete_not_exist.ipynb en notebooks/notebooks/, recordar cambiar los parametros que son.
 
 ## Evaluacion
 

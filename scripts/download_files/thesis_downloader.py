@@ -48,5 +48,5 @@ def download_from_file(csv_source, path_to_save):
 
 
 if __name__ == '__main__':
-    download_from_file('./csv_files/url_thesis_8211.csv', 'thesis_pdf_all')
+    download_from_file('./csv_files/url_thesis_8212.csv', 'thesis_pdf_test')
 

@@ -207,7 +207,9 @@ class Haystack_module():
 if __name__ == "__main__":
 
     #csv_source = "scripts/haystack_files/data/thesis_comp_ingelec_quimica_date.csv"
-    csv_source = 'scripts/haystack_files/data/thesis_comp_ingelec_quimica_date_head.csv'
+    #csv_source = 'scripts/haystack_files/data/thesis_comp_ingelec_quimica_date_head.csv'
+    #csv_source = "scripts/haystack_files/data/franky_thesis.csv"
+    csv_source = "scripts/haystack_files/data/mairene_thesis.csv"
 
     ## BM25 
     #elastic = Haystack_module(option="ES")
